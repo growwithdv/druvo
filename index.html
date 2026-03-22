@@ -1013,13 +1013,16 @@ function renderServices(){
 function renderWork(){
   const sg=document.getElementById('shortGrid');
   const lg=document.getElementById('longGrid');
-  sg.innerHTML=S.work.short.map(w=>{
+  sg.innerHTML=S.work.short.map((w,i)=>{
     const id=ytId(w.url);
-    return `<div class="work-card reveal">
-      <div class="work-thumb">
+    return `<div class="work-card">
+      <div class="work-thumb" id="wst-${i}">
         <div class="work-thumb-bg"></div>
-        ${id?`<div style="position:absolute;inset:0;"><iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1" style="width:100%;height:100%;border:none;" allowfullscreen></iframe></div>`:`<div class="work-thumb-icon">📱</div>`}
-        <div class="work-play"><div class="wplay">▶</div></div>
+        ${id
+          ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+             <div class="work-play" onclick="playVideo('wst-${i}','${id}')"><div class="wplay">▶</div></div>`
+          : `<div class="work-thumb-icon">📱</div>`
+        }
       </div>
       <div class="work-meta">
         <div class="work-title">${w.title}</div>
@@ -1027,13 +1030,16 @@ function renderWork(){
       </div>
     </div>`;
   }).join('');
-  lg.innerHTML=S.work.long.map(w=>{
+  lg.innerHTML=S.work.long.map((w,i)=>{
     const id=ytId(w.url);
-    return `<div class="work-card reveal">
-      <div class="work-thumb landscape">
+    return `<div class="work-card">
+      <div class="work-thumb landscape" id="wlt-${i}">
         <div class="work-thumb-bg"></div>
-        ${id?`<div style="position:absolute;inset:0;"><iframe src="https://www.youtube.com/embed/${id}?rel=0&modestbranding=1" style="width:100%;height:100%;border:none;" allowfullscreen></iframe></div>`:`<div class="work-thumb-icon">🎬</div>`}
-        <div class="work-play"><div class="wplay">▶</div></div>
+        ${id
+          ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+             <div class="work-play" onclick="playVideo('wlt-${i}','${id}')"><div class="wplay">▶</div></div>`
+          : `<div class="work-thumb-icon">🎬</div>`
+        }
       </div>
       <div class="work-meta">
         <div class="work-title">${w.title}</div>
@@ -1041,7 +1047,12 @@ function renderWork(){
       </div>
     </div>`;
   }).join('');
-  reObserve(sg); reObserve(lg);
+}
+
+function playVideo(containerId, ytVideoId){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytVideoId}?autoplay=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allowfullscreen allow="autoplay"></iframe>`;
 }
 
 function renderTesti(){
