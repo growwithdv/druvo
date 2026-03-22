@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Druvo — Dashboard</title>
+<style>
+:root {
+  --primary:#D0611C; --primary-h:#E8742A; --primary-dim:rgba(208,97,28,.12);
+  --cream:#FFF7E8; --cm60:rgba(255,247,232,.6); --cm35:rgba(255,247,232,.35); --cm20:rgba(255,247,232,.2);
+  --bg:#080604; --bg2:#0F0B08; --bg3:#171009; --bg4:#1E1510;
+  --bd:rgba(255,247,232,.08); --bdo:rgba(208,97,28,.22);
+  --font:-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
+  --sidebar:260px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:var(--font);-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--cream);}
+a{text-decoration:none;color:inherit;}
+
+/* ── LAYOUT ── */
+.layout{display:flex;height:100vh;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--bd);
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;
+}
+.sb-top{padding:24px 20px 20px;border-bottom:1px solid var(--bd);}
+.sb-brand{font-size:1rem;font-weight:700;letter-spacing:.1em;color:var(--cream);}
+.sb-brand span{color:var(--primary);}
+.sb-sub{font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--cm35);margin-top:3px;}
+.sb-nav{padding:16px 12px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:8px;cursor:pointer;
+  font-size:.8rem;font-weight:500;color:var(--cm35);
+  transition:background .2s,color .2s;
+  border:none;background:transparent;font-family:var(--font);
+  width:100%;text-align:left;
+}
+.sb-item:hover{background:var(--bg3);color:var(--cm60);}
+.sb-item.active{background:var(--primary-dim);color:var(--cream);border:1px solid var(--bdo);}
+.sb-item .sb-ico{font-size:.95rem;width:20px;text-align:center;flex-shrink:0;}
+.sb-item .sb-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);margin-left:auto;display:none;}
+.sb-item.has-data .sb-dot{display:block;}
+.sb-bottom{padding:16px 12px;border-top:1px solid var(--bd);}
+.sb-view-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:10px;border-radius:8px;
+  background:var(--primary);color:var(--bg);
+  font-size:.75rem;font-weight:700;letter-spacing:.06em;
+  border:none;cursor:pointer;font-family:var(--font);
+  transition:background .2s;
+}
+.sb-view-btn:hover{background:var(--primary-h);}
+
+/* ── MAIN CONTENT ── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 36px;height:60px;
+  background:var(--bg2);border-bottom:1px solid var(--bd);
+  flex-shrink:0;position:sticky;top:0;z-index:10;
+}
+.topbar-title{font-size:.9rem;font-weight:600;color:var(--cream);display:flex;align-items:center;gap:10px;}
+.topbar-icon{font-size:1rem;}
+.save-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--primary);color:var(--bg);
+  border:none;border-radius:8px;padding:9px 22px;
+  font-size:.78rem;font-weight:700;letter-spacing:.06em;
+  cursor:pointer;font-family:var(--font);transition:all .2s;
+}
+.save-btn:hover{background:var(--primary-h);transform:translateY(-1px);}
+.save-btn.saved{background:#27ae60;}
+
+.panel-area{padding:32px 36px 80px;flex:1;}
+
+/* ── PANELS ── */
+.panel{display:none;}
+.panel.active{display:flex;flex-direction:column;gap:20px;}
+
+/* ── FIELDS ── */
+.field-group{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;}
+.fg-head{padding:14px 20px;background:var(--bg3);border-bottom:1px solid var(--bd);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cm35);}
+.fg-body{padding:20px;display:flex;flex-direction:column;gap:14px;}
+.f-row{display:grid;gap:12px;}
+.f-row.c2{grid-template-columns:1fr 1fr;}
+.f-row.c3{grid-template-columns:1fr 1fr 1fr;}
+.f-field{}
+.f-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cm20);margin-bottom:7px;}
+.f-in,.f-ta{
+  width:100%;background:var(--bg4);border:1px solid var(--bdo);
+  border-radius:8px;padding:10px 14px;font-size:.85rem;
+  color:var(--cream);outline:none;font-family:var(--font);
+  transition:border-color .2s;line-height:1.5;
+}
+.f-ta{resize:vertical;min-height:80px;}
+.f-in:focus,.f-ta:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(208,97,28,.08);}
+.f-in::placeholder,.f-ta::placeholder{color:rgba(255,247,232,.2);}
+
+/* ── ITEMS (services, work, testi) ── */
+.items-list{display:flex;flex-direction:column;gap:10px;}
+.d-item{
+  background:var(--bg3);border:1px solid var(--bd);border-radius:10px;
+  padding:16px;display:flex;flex-direction:column;gap:10px;
+  position:relative;
+}
+.d-item:hover{border-color:var(--bdo);}
+.d-item-num{font-size:.65rem;font-weight:700;letter-spacing:.1em;color:var(--primary);margin-bottom:2px;}
+.d-item-del{
+  position:absolute;top:12px;right:12px;
+  width:26px;height:26px;border-radius:50%;
+  background:transparent;border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;cursor:pointer;color:var(--cm35);
+  transition:all .2s;
+}
+.d-item-del:hover{background:#c0392b;color:#fff;border-color:#c0392b;}
+.add-btn{
+  width:100%;background:transparent;border:1px dashed var(--bdo);
+  border-radius:10px;padding:12px;font-size:.78rem;font-weight:600;
+  color:var(--primary);cursor:pointer;font-family:var(--font);
+  transition:background .2s;
+}
+.add-btn:hover{background:var(--primary-dim);}
+
+/* ── TIP ── */
+.tip{font-size:.75rem;color:var(--cm35);line-height:1.6;padding:12px 16px;background:var(--bg3);border-radius:8px;border-left:2px solid var(--bdo);}
+
+/* ── PREVIEW CARD ── */
+.preview-card{background:var(--bg2);border:1px solid var(--bdo);border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px;}
+.preview-thumb{width:80px;height:80px;border-radius:8px;background:var(--bg4);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;}
+.preview-info{}
+.preview-title{font-size:.88rem;font-weight:600;color:var(--cream);margin-bottom:4px;}
+.preview-sub{font-size:.75rem;color:var(--cm35);}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:var(--primary);color:var(--bg);
+  font-size:.78rem;font-weight:700;letter-spacing:.06em;
+  padding:10px 26px;border-radius:100px;
+  z-index:9999;opacity:0;transition:all .3s;pointer-events:none;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.stat-card{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:18px 16px;}
+.stat-card-n{font-size:1.5rem;font-weight:700;color:var(--primary);letter-spacing:-.03em;}
+.stat-card-l{font-size:.7rem;color:var(--cm35);margin-top:4px;letter-spacing:.06em;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-var(--sidebar);z-index:100;transition:left .3s;}
+  .f-row.c2,.f-row.c3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-brand">DRUV<span>O</span></div>
+      <div class="sb-sub">Content Dashboard</div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-item active" data-panel="hero" onclick="switchPanel('hero',this)">
+        <span class="sb-ico">🏠</span> Hero Section <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="showreel" onclick="switchPanel('showreel',this)">
+        <span class="sb-ico">▶</span> Showreel Video <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="about" onclick="switchPanel('about',this)">
+        <span class="sb-ico">👤</span> About Section <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="services" onclick="switchPanel('services',this)">
+        <span class="sb-ico">⚡</span> Services <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="work" onclick="switchPanel('work',this)">
+        <span class="sb-ico">🎬</span> Portfolio <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="testi" onclick="switchPanel('testi',this)">
+        <span class="sb-ico">💬</span> Testimonials <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="booking" onclick="switchPanel('booking',this)">
+        <span class="sb-ico">📅</span> Book a Call <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="social" onclick="switchPanel('social',this)">
+        <span class="sb-ico">🔗</span> Social Links <span class="sb-dot"></span>
+      </button>
+    </nav>
+    <div class="sb-bottom">
+      <button class="sb-view-btn" onclick="openSite()">↗ View Website</button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">
+        <span class="topbar-icon" id="topbar-icon">🏠</span>
+        <span id="topbar-title">Hero Section</span>
+      </div>
+      <button class="save-btn" id="save-btn" onclick="saveAll()">Save Changes</button>
+    </div>
+
+    <div class="panel-area">
+
+      <!-- ── HERO ── -->
+      <div class="panel active" id="panel-hero">
+        <div class="field-group">
+          <div class="fg-head">Headlines & Text</div>
+          <div class="fg-body">
+            <div class="f-field"><div class="f-label">Eyebrow Tag</div><input class="f-in" id="d-eyebrow" placeholder="Content That Converts"/></div>
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Headline Line 1</div><input class="f-in" id="d-h1a" placeholder="We Help Brands"/></div>
+              <div class="f-field"><div class="f-label">Headline Accent (orange)</div><input class="f-in" id="d-h1b" placeholder="High‑Converting"/></div>
+            </div>
+            <div class="f-field"><div class="f-label">Subtext</div><textarea class="f-ta" id="d-sub"></textarea></div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Buttons</div>
+          <div class="fg-body">
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Primary Button Text</div><input class="f-in" id="d-btn1" placeholder="Book a Free Call"/></div>
+              <div class="f-field"><div class="f-label">Secondary Button Text</div><input class="f-in" id="d-btn2" placeholder="See Our Work"/></div>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Stats</div>
+          <div class="fg-body">
+            <div class="f-row c3">
+              <div class="f-field"><div class="f-label">Stat 1 Number</div><input class="f-in" id="d-s1n" placeholder="150+"/></div>
+              <div class="f-field"><div class="f-label">Stat 2 Number</div><input class="f-in" id="d-s2n" placeholder="500+"/></div>
+              <div class="f-field"><div class="f-label">Stat 3 Number</div><input class="f-in" id="d-s3n" placeholder="40M+"/></div>
+            </div>
+            <div class="f-row c3">
+              <div class="f-field"><div class="f-label">Stat 1 Label</div><input class="f-in" id="d-s1l" placeholder="Projects Delivered"/></div>
+              <div class="f-field"><div class="f-label">Stat 2 Label</div><input class="f-in" id="d-s2l" placeholder="Videos Edited"/></div>
+              <div class="f-field"><div class="f-label">Stat 3 Label</div><input class="f-in" id="d-s3l" placeholder="Views Generated"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SHOWREEL ── -->
+      <div class="panel" id="panel-showreel">
+        <div class="tip">💡 Paste your YouTube link below. The video will be embedded automatically on your website — no extra steps needed.</div>
+        <div class="field-group">
+          <div class="fg-head">Showreel Video</div>
+          <div class="fg-body">
+            <div class="f-field"><div class="f-label">YouTube URL</div><input class="f-in" id="d-showreel" placeholder="https://www.youtube.com/watch?v=..."/></div>
+            <div class="preview-card" id="showreel-preview" style="display:none;">
+              <div class="preview-thumb">▶</div>
+              <div class="preview-info">
+                <div class="preview-title" id="showreel-preview-title">Video linked</div>
+                <div class="preview-sub" id="showreel-preview-url"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ABOUT ── -->
+      <div class="panel" id="panel-about">
+        <div class="field-group">
+          <div class="fg-head">Profile Photo (About Section)</div>
+          <div class="fg-body">
+            <div class="tip">💡 Upload your photo — it will replace the "D" frame in the About section of your website.</div>
+            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+              <div id="about-photo-preview" style="width:100px;height:100px;border-radius:12px;background:var(--bg4);border:1px solid var(--bdo);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;flex-shrink:0;">👤</div>
+              <div style="flex:1;">
+                <label style="display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:var(--bg);border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.78rem;font-weight:700;letter-spacing:.06em;">
+                  📷 Upload Photo
+                  <input type="file" accept="image/*" id="about-photo-input" style="display:none;" onchange="handleAboutPhoto(this)"/>
+                </label>
+                <div style="font-size:.72rem;color:var(--cm35);margin-top:8px;">JPG, PNG, WebP — recommended square or portrait</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">About Text</div>
+          <div class="fg-body">
+            <div class="f-field"><div class="f-label">Paragraph 1</div><textarea class="f-ta" id="d-about1"></textarea></div>
+            <div class="f-field"><div class="f-label">Paragraph 2</div><textarea class="f-ta" id="d-about2"></textarea></div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Bullet Points</div>
+          <div class="fg-body">
+            <div class="items-list" id="about-list-editor"></div>
+            <button class="add-btn" onclick="addAboutLi()">+ Add Bullet Point</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SERVICES ── -->
+      <div class="panel" id="panel-services">
+        <div class="items-list" id="services-editor"></div>
+        <button class="add-btn" onclick="addService()">+ Add Service</button>
+      </div>
+
+      <!-- ── WORK / PORTFOLIO ── -->
+      <div class="panel" id="panel-work">
+        <div class="tip">💡 Add YouTube links for each video. Short Form = portrait cards (9:16). Long Form = landscape cards (16:9).</div>
+        <div class="field-group">
+          <div class="fg-head">Short Form Videos</div>
+          <div class="fg-body">
+            <div class="items-list" id="short-editor"></div>
+            <button class="add-btn" onclick="addWork('short')">+ Add Short Form Video</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Long Form Videos</div>
+          <div class="fg-body">
+            <div class="items-list" id="long-editor"></div>
+            <button class="add-btn" onclick="addWork('long')">+ Add Long Form Video</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TESTIMONIALS ── -->
+      <div class="panel" id="panel-testi">
+        <div class="items-list" id="testi-editor"></div>
+        <button class="add-btn" onclick="addTesti()">+ Add Testimonial</button>
+      </div>
+
+      <!-- ── BOOKING ── -->
+      <div class="panel" id="panel-booking">
+        <div class="tip">💡 Paste your Calendly or Cal.com booking link. It will be embedded directly on your website so visitors can book without leaving the page.</div>
+        <div class="field-group">
+          <div class="fg-head">Booking Link</div>
+          <div class="fg-body">
+            <div class="f-field"><div class="f-label">Calendly or Cal.com URL</div><input class="f-in" id="d-cal" placeholder="https://calendly.com/yourname/30min"/></div>
+            <div class="preview-card" id="cal-preview" style="display:none;">
+              <div class="preview-thumb">📅</div>
+              <div class="preview-info">
+                <div class="preview-title">Booking link saved</div>
+                <div class="preview-sub" id="cal-preview-url"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SOCIAL ── -->
+      <div class="panel" id="panel-social">
+        <div class="field-group">
+          <div class="fg-head">Social Media Links</div>
+          <div class="fg-body">
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Facebook</div><input class="f-in" id="d-fb" placeholder="https://facebook.com/druvo"/></div>
+              <div class="f-field"><div class="f-label">Instagram</div><input class="f-in" id="d-ig" placeholder="https://instagram.com/druvo"/></div>
+            </div>
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">YouTube</div><input class="f-in" id="d-yt" placeholder="https://youtube.com/@druvo"/></div>
+              <div class="f-field"><div class="f-label">LinkedIn</div><input class="f-in" id="d-li" placeholder="https://linkedin.com/in/druvo"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-area -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+const S = {
+  hero:{ eyebrow:'Content That Converts', h1a:'We Help Brands', h1b:'High‑Converting',
+    sub:'From scroll-stopping short-form edits to cinematic long-form productions — Druvo engineers content that builds audiences and drives real growth.',
+    btn1:'Book a Free Call', btn2:'See Our Work',
+    s1n:'150+', s2n:'500+', s3n:'40M+',
+    s1l:'Projects Delivered', s2l:'Videos Edited', s3l:'Views Generated' },
+  showreel: '',
+  aboutPhoto: '',
+  about:{
+    p1:"Druvo is not just a video editing agency. We're a full-stack content partner for creators, entrepreneurs, and brands who are serious about building an audience and scaling their presence.",
+    p2:'Every frame we touch is engineered to stop the scroll, build trust, and convert viewers into followers — and followers into customers.',
+    list:['Results-driven creative strategy','Platform-native content optimization','Fast turnaround, zero compromise on quality','Dedicated partner — not just a vendor']
+  },
+  services:[
+    {icon:'⚡',name:'Short Form Content Editing',desc:'Reels, Shorts & TikToks engineered to hook in the first 2 seconds and retain until the very end.'},
+    {icon:'🎬',name:'Long Form Video Editing',desc:'YouTube videos, documentaries & podcasts cut with cinematic precision and narrative depth.'},
+    {icon:'🧠',name:'Content Strategy',desc:'Data-backed content systems that grow your channel, build loyalty, and maximize every upload.'},
+    {icon:'✨',name:'Motion Graphics',desc:'Animated intros, kinetic text, transitions and full motion sequences that make your brand unforgettable.'},
+    {icon:'🚀',name:'Personal Brand Growth',desc:'Full-service personal branding — from visual identity to content systems that scale with you.'},
+    {icon:'🎨',name:'Graphic Design',desc:'Thumbnails, brand kits, and social assets that make every touchpoint look premium and consistent.'}
+  ],
+  work:{
+    short:[
+      {title:'Hook-First Brand Reel',tag:'Reels · 2.1M Views',url:''},
+      {title:'Viral Product Showcase',tag:'TikTok · 5.6M Views',url:''},
+      {title:'Talking Head Edit',tag:'YouTube Shorts · 890K Views',url:''}
+    ],
+    long:[
+      {title:'Personal Brand Documentary',tag:'YouTube · 45 min · 320K Views',url:''},
+      {title:'Podcast Full Edit',tag:'YouTube · 1hr 12min · 180K Views',url:''}
+    ]
+  },
+  testi:[
+    {name:'Aryan Mehta',role:'Founder, @AcmeBrand · 280K followers',stars:5,quote:'Druvo completely transformed our content game. Our Reels went from 2K to 200K average views within 6 weeks. Insane results.',photo:''},
+    {name:'Priya Sharma',role:'Personal Brand Coach · 120K YouTube',stars:5,quote:'Not just editors — real strategic partners. They told me what content to make, how to cut it, and why. The ROI has been unreal.',photo:''},
+    {name:'Zain Al-Rashid',role:'CEO, Scale Media · Dubai',stars:5,quote:"Fastest turnaround I've ever seen without sacrificing an ounce of quality. They get the vision immediately. 10/10 would recommend.",photo:''}
+  ],
+  cal:'',
+  social:{fb:'',ig:'',yt:'',li:''}
+};
+
+const KEY = 'druvo_v2';
+
+// ══════════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════════
+const SB_URL = 'https://wzgthboowcxhskyldkun.supabase.co';
+const SB_KEY = 'sb_publishable_tm8diUfa8njZVx07F2Fh0g_JqOIv8Oe';
+const ROW_ID = 'druvo_main';
+
+async function sbSave(data){
+  const res = await fetch(`${SB_URL}/rest/v1/site_content?id=eq.${ROW_ID}`,{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body: JSON.stringify({data, updated_at: new Date().toISOString()})
+  });
+  return res.ok;
+}
+
+async function sbLoad(){
+  const res = await fetch(`${SB_URL}/rest/v1/site_content?id=eq.${ROW_ID}&select=data`,{
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+  });
+  if(!res.ok) return null;
+  const arr = await res.json();
+  return arr[0]?.data || null;
+}
+
+async function loadState(){
+  // try Supabase first
+  try{
+    const remote = await sbLoad();
+    if(remote && Object.keys(remote).length > 0){
+      Object.keys(remote).forEach(k=>{
+        if(!(k in S)) return;
+        if(typeof remote[k]==='object'&&!Array.isArray(remote[k])&&remote[k]!==null) Object.assign(S[k], remote[k]);
+        else S[k] = remote[k];
+      });
+      return;
+    }
+  }catch(e){ console.warn('Supabase load failed, using localStorage', e); }
+  // fallback to localStorage
+  try{
+    const d = localStorage.getItem(KEY);
+    if(d){ const p=JSON.parse(d); Object.keys(p).forEach(k=>{ if(k in S){ if(typeof p[k]==='object'&&p[k]!==null&&!Array.isArray(p[k])) Object.assign(S[k],p[k]); else S[k]=p[k]; } }); }
+  }catch(e){}
+}
+
+async function saveState(){
+  // save to localStorage as fallback
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+  // save to Supabase
+  try{
+    const ok = await sbSave(S);
+    if(!ok) console.warn('Supabase save failed');
+  }catch(e){ console.warn('Supabase save error', e); }
+}
+
+// ══════════════════════════════════════
+// POPULATE FIELDS FROM STATE
+// ══════════════════════════════════════
+function populateAll(){
+  // Hero
+  set('d-eyebrow', S.hero.eyebrow);
+  set('d-h1a', S.hero.h1a);
+  set('d-h1b', S.hero.h1b);
+  set('d-sub', S.hero.sub);
+  set('d-btn1', S.hero.btn1);
+  set('d-btn2', S.hero.btn2);
+  set('d-s1n', S.hero.s1n); set('d-s2n', S.hero.s2n); set('d-s3n', S.hero.s3n);
+  set('d-s1l', S.hero.s1l); set('d-s2l', S.hero.s2l); set('d-s3l', S.hero.s3l);
+  // Showreel
+  set('d-showreel', S.showreel||'');
+  updateShowreelPreview();
+  // About photo
+  if(S.aboutPhoto){ const p=document.getElementById('about-photo-preview'); if(p) p.innerHTML=`<img src="${S.aboutPhoto}" style="width:100%;height:100%;object-fit:cover;"/>`; }
+  // About
+  set('d-about1', S.about.p1);
+  set('d-about2', S.about.p2);
+  renderAboutListEditor();
+  // Services
+  renderServicesEditor();
+  // Work
+  renderWorkEditor();
+  // Testi
+  renderTestiEditor();
+  // Cal
+  set('d-cal', S.cal||'');
+  updateCalPreview();
+  // Social
+  set('d-fb', S.social.fb||'');
+  set('d-ig', S.social.ig||'');
+  set('d-yt', S.social.yt||'');
+  set('d-li', S.social.li||'');
+}
+
+function set(id, val){ const el=document.getElementById(id); if(el) el.value=val||''; }
+function get(id){ return (document.getElementById(id)?.value||'').trim(); }
+
+// ══════════════════════════════════════
+// COLLECT FROM FIELDS INTO STATE
+// ══════════════════════════════════════
+function collectAll(){
+  S.hero.eyebrow = get('d-eyebrow')||S.hero.eyebrow;
+  S.hero.h1a = get('d-h1a')||S.hero.h1a;
+  S.hero.h1b = get('d-h1b')||S.hero.h1b;
+  S.hero.sub = get('d-sub')||S.hero.sub;
+  S.hero.btn1 = get('d-btn1')||S.hero.btn1;
+  S.hero.btn2 = get('d-btn2')||S.hero.btn2;
+  S.hero.s1n = get('d-s1n')||S.hero.s1n; S.hero.s2n = get('d-s2n')||S.hero.s2n; S.hero.s3n = get('d-s3n')||S.hero.s3n;
+  S.hero.s1l = get('d-s1l')||S.hero.s1l; S.hero.s2l = get('d-s2l')||S.hero.s2l; S.hero.s3l = get('d-s3l')||S.hero.s3l;
+  S.showreel = get('d-showreel');
+  // aboutPhoto handled by handleAboutPhoto separately
+  S.about.p1 = get('d-about1')||S.about.p1;
+  S.about.p2 = get('d-about2')||S.about.p2;
+  S.about.list = S.about.list.map((_,i)=>{ const el=document.getElementById('ali-'+i); return el?el.value:_; });
+  S.services = S.services.map((_,i)=>({
+    icon: document.getElementById('svi-'+i)?.value||_.icon,
+    name: document.getElementById('svn-'+i)?.value||_.name,
+    desc: document.getElementById('svd-'+i)?.value||_.desc
+  }));
+  S.work.short = S.work.short.map((_,i)=>({
+    title: document.getElementById('wst-'+i)?.value||_.title,
+    tag:   document.getElementById('wsg-'+i)?.value||_.tag,
+    url:   document.getElementById('wsu-'+i)?.value||''
+  }));
+  S.work.long = S.work.long.map((_,i)=>({
+    title: document.getElementById('wlt-'+i)?.value||_.title,
+    tag:   document.getElementById('wlg-'+i)?.value||_.tag,
+    url:   document.getElementById('wlu-'+i)?.value||''
+  }));
+  S.testi = S.testi.map((_,i)=>({
+    name:  document.getElementById('tin-'+i)?.value||_.name,
+    role:  document.getElementById('tir-'+i)?.value||_.role,
+    stars: _.stars,
+    quote: document.getElementById('tiq-'+i)?.value||_.quote,
+    photo: _.photo||''
+  }));
+  S.cal = get('d-cal');
+  S.social.fb = get('d-fb');
+  S.social.ig = get('d-ig');
+  S.social.yt = get('d-yt');
+  S.social.li = get('d-li');
+}
+
+// ══════════════════════════════════════
+// EDITORS
+// ══════════════════════════════════════
+function renderAboutListEditor(){
+  document.getElementById('about-list-editor').innerHTML = S.about.list.map((t,i)=>`
+    <div class="d-item" style="flex-direction:row;align-items:center;padding:10px 14px;gap:8px;">
+      <input class="f-in" id="ali-${i}" value="${esc(t)}" style="flex:1;"/>
+      <button class="d-item-del" onclick="removeAboutLi(${i})">✕</button>
+    </div>`).join('');
+}
+function addAboutLi(){ S.about.list.push('New point'); renderAboutListEditor(); }
+function removeAboutLi(i){ S.about.list.splice(i,1); renderAboutListEditor(); }
+
+function renderServicesEditor(){
+  document.getElementById('services-editor').innerHTML = S.services.map((s,i)=>`
+    <div class="d-item">
+      <div class="d-item-num">Service ${i+1}</div>
+      <button class="d-item-del" onclick="removeSvc(${i})">✕</button>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Icon (emoji)</div><input class="f-in" id="svi-${i}" value="${esc(s.icon)}" style="font-size:1.2rem;"/></div>
+        <div class="f-field"><div class="f-label">Service Name</div><input class="f-in" id="svn-${i}" value="${esc(s.name)}"/></div>
+      </div>
+      <div class="f-field"><div class="f-label">Description</div><textarea class="f-ta" id="svd-${i}" style="min-height:60px;">${esc(s.desc)}</textarea></div>
+    </div>`).join('');
+}
+function addService(){ S.services.push({icon:'✨',name:'New Service',desc:'Describe this service.'}); renderServicesEditor(); }
+function removeSvc(i){ S.services.splice(i,1); renderServicesEditor(); }
+
+function renderWorkEditor(){
+  document.getElementById('short-editor').innerHTML = S.work.short.map((w,i)=>`
+    <div class="d-item">
+      <div class="d-item-num">Short Form ${i+1}</div>
+      <button class="d-item-del" onclick="removeWork('short',${i})">✕</button>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Title</div><input class="f-in" id="wst-${i}" value="${esc(w.title)}"/></div>
+        <div class="f-field"><div class="f-label">Tag (platform · views)</div><input class="f-in" id="wsg-${i}" value="${esc(w.tag)}"/></div>
+      </div>
+      <div class="f-field"><div class="f-label">YouTube URL</div><input class="f-in" id="wsu-${i}" value="${esc(w.url)}" placeholder="https://youtu.be/..."/></div>
+    </div>`).join('');
+  document.getElementById('long-editor').innerHTML = S.work.long.map((w,i)=>`
+    <div class="d-item">
+      <div class="d-item-num">Long Form ${i+1}</div>
+      <button class="d-item-del" onclick="removeWork('long',${i})">✕</button>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Title</div><input class="f-in" id="wlt-${i}" value="${esc(w.title)}"/></div>
+        <div class="f-field"><div class="f-label">Tag</div><input class="f-in" id="wlg-${i}" value="${esc(w.tag)}"/></div>
+      </div>
+      <div class="f-field"><div class="f-label">YouTube URL</div><input class="f-in" id="wlu-${i}" value="${esc(w.url)}" placeholder="https://youtu.be/..."/></div>
+    </div>`).join('');
+}
+function addWork(t){ S.work[t].push({title:'New Video',tag:'Platform · Views',url:''}); renderWorkEditor(); }
+function removeWork(t,i){ S.work[t].splice(i,1); renderWorkEditor(); }
+
+function renderTestiEditor(){
+  document.getElementById('testi-editor').innerHTML = S.testi.map((t,i)=>`
+    <div class="d-item">
+      <div class="d-item-num">Testimonial ${i+1}</div>
+      <button class="d-item-del" onclick="removeTesti(${i})">✕</button>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
+        <div id="tav-${i}" style="width:52px;height:52px;border-radius:50%;background:var(--bg4);border:1px solid var(--bdo);display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden;flex-shrink:0;">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;object-fit:cover;"/>`:'👤'}</div>
+        <label style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--bdo);color:var(--primary);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.74rem;font-weight:600;">
+          📷 Upload Photo
+          <input type="file" accept="image/*" style="display:none;" onchange="handleTestiPhoto(this,${i})"/>
+        </label>
+        ${t.photo?`<button onclick="clearTestiPhoto(${i})" style="background:transparent;border:1px solid var(--bd);color:var(--cm35);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:.7rem;font-family:inherit;">Remove</button>`:''}
+      </div>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Client Name</div><input class="f-in" id="tin-${i}" value="${esc(t.name)}"/></div>
+        <div class="f-field"><div class="f-label">Role / Platform</div><input class="f-in" id="tir-${i}" value="${esc(t.role)}"/></div>
+      </div>
+      <div class="f-field"><div class="f-label">Quote</div><textarea class="f-ta" id="tiq-${i}" style="min-height:64px;">${esc(t.quote)}</textarea></div>
+    </div>`).join('');
+}
+function addTesti(){ S.testi.push({name:'Client Name',role:'Role / Platform',stars:5,quote:'Amazing work, highly recommend!',photo:''}); renderTestiEditor(); }
+function removeTesti(i){ S.testi.splice(i,1); renderTestiEditor(); }
+
+// ══════════════════════════════════════
+// PREVIEW HELPERS
+// ══════════════════════════════════════
+function updateShowreelPreview(){
+  const url = get('d-showreel') || S.showreel;
+  const p = document.getElementById('showreel-preview');
+  if(url){ p.style.display='flex'; document.getElementById('showreel-preview-url').textContent=url.slice(0,50)+'...'; }
+  else p.style.display='none';
+}
+document.addEventListener('input', e=>{ if(e.target.id==='d-showreel') updateShowreelPreview(); });
+
+function updateCalPreview(){
+  const url = get('d-cal') || S.cal;
+  const p = document.getElementById('cal-preview');
+  if(url){ p.style.display='flex'; document.getElementById('cal-preview-url').textContent=url.slice(0,50)+'...'; }
+  else p.style.display='none';
+}
+document.addEventListener('input', e=>{ if(e.target.id==='d-cal') updateCalPreview(); });
+
+// ══════════════════════════════════════
+// PHOTO HANDLERS
+// ══════════════════════════════════════
+function handleAboutPhoto(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    S.aboutPhoto = e.target.result;
+    const p = document.getElementById('about-photo-preview');
+    if(p) p.innerHTML = `<img src="${S.aboutPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"/>`;
+    saveState();
+    toast('Photo uploaded & saved ✓');
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleTestiPhoto(input, i){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    S.testi[i].photo = e.target.result;
+    const av = document.getElementById('tav-'+i);
+    if(av) av.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"/>`;
+    saveState();
+    toast('Client photo uploaded ✓');
+    renderTestiEditor();
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearTestiPhoto(i){
+  S.testi[i].photo = '';
+  saveState();
+  renderTestiEditor();
+}
+
+// ══════════════════════════════════════
+// SAVE
+// ══════════════════════════════════════
+async function saveAll(){
+  collectAll();
+  const btn = document.getElementById('save-btn');
+  btn.textContent='Saving...'; btn.style.opacity='.7';
+  await saveState();
+  btn.textContent='✓ Saved!'; btn.classList.add('saved'); btn.style.opacity='1';
+  toast('All changes saved to Supabase ✓');
+  setTimeout(()=>{ btn.textContent='Save Changes'; btn.classList.remove('saved'); }, 2500);
+}
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+const panelMeta = {
+  hero:     {icon:'🏠', title:'Hero Section'},
+  showreel: {icon:'▶',  title:'Showreel Video'},
+  about:    {icon:'👤', title:'About Section'},
+  services: {icon:'⚡', title:'Services'},
+  work:     {icon:'🎬', title:'Portfolio / Our Work'},
+  testi:    {icon:'💬', title:'Testimonials'},
+  booking:  {icon:'📅', title:'Book a Call'},
+  social:   {icon:'🔗', title:'Social Links'}
+};
+
+function switchPanel(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  const m = panelMeta[id];
+  document.getElementById('topbar-icon').textContent = m.icon;
+  document.getElementById('topbar-title').textContent = m.title;
+}
+
+function openSite(){
+  alert('Open your druvo-v2-dash.html file in a browser — changes saved here will appear there automatically!');
+}
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// Keyboard shortcut: Ctrl/Cmd+S to save
+document.addEventListener('keydown', e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){ e.preventDefault(); saveAll(); }
+});
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+(async()=>{
+  const btn = document.getElementById('save-btn');
+  btn.textContent='Loading...'; btn.style.opacity='.6';
+  await loadState();
+  btn.textContent='Save Changes'; btn.style.opacity='1';
+  populateAll();
+  toast('Content loaded from Supabase ✓');
+})();
+</script>
+</body>
+</html>
