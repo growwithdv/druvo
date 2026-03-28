@@ -193,6 +193,9 @@ a{text-decoration:none;color:inherit;}
       <button class="sb-item" data-panel="booking" onclick="switchPanel('booking',this)">
         <span class="sb-ico">📅</span> Book a Call <span class="sb-dot"></span>
       </button>
+      <button class="sb-item" data-panel="cta" onclick="switchPanel('cta',this)">
+        <span class="sb-ico">🚀</span> CTA Section <span class="sb-dot"></span>
+      </button>
       <button class="sb-item" data-panel="social" onclick="switchPanel('social',this)">
         <span class="sb-ico">🔗</span> Social Links <span class="sb-dot"></span>
       </button>
@@ -282,7 +285,7 @@ a{text-decoration:none;color:inherit;}
               <div style="flex:1;">
                 <label style="display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:var(--bg);border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.78rem;font-weight:700;letter-spacing:.06em;">
                   📷 Upload Photo
-                  <input type="file" accept="image/*" id="about-photo-input" style="display:none;" onchange="handleAboutPhoto(this)"/>
+                  <input type="file" accept="image/*,.heic,.heif" id="about-photo-input" style="display:none;" onchange="handleAboutPhoto(this)"/>
                 </label>
                 <div style="font-size:.72rem;color:var(--cm35);margin-top:8px;">JPG, PNG, WebP — recommended square or portrait</div>
               </div>
@@ -334,6 +337,35 @@ a{text-decoration:none;color:inherit;}
       <div class="panel" id="panel-testi">
         <div class="items-list" id="testi-editor"></div>
         <button class="add-btn" onclick="addTesti()">+ Add Testimonial</button>
+      </div>
+
+      <!-- ── CTA ── -->
+      <div class="panel" id="panel-cta">
+        <div class="field-group">
+          <div class="fg-head">CTA Section Content</div>
+          <div class="fg-body">
+            <div class="f-field"><div class="f-label">Heading</div><input class="f-in" id="d-cta-h" placeholder="Ready to Scale Your Content?"/></div>
+            <div class="f-field"><div class="f-label">Subtext</div><textarea class="f-ta" id="d-cta-sub" style="min-height:64px;"></textarea></div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Button 1 (Primary — Orange)</div>
+          <div class="fg-body">
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Button Text</div><input class="f-in" id="d-cta-b1t" placeholder="Book a Free Call"/></div>
+              <div class="f-field"><div class="f-label">Button Link</div><input class="f-in" id="d-cta-b1l" placeholder="https://calendly.com/... or #booking"/></div>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">Button 2 (Secondary — Outline)</div>
+          <div class="fg-body">
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Button Text</div><input class="f-in" id="d-cta-b2t" placeholder="View Our Work"/></div>
+              <div class="f-field"><div class="f-label">Button Link</div><input class="f-in" id="d-cta-b2l" placeholder="#work or any URL"/></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ── BOOKING ── -->
@@ -417,6 +449,7 @@ const S = {
     {name:'Zain Al-Rashid',role:'CEO, Scale Media · Dubai',stars:5,quote:"Fastest turnaround I've ever seen without sacrificing an ounce of quality. They get the vision immediately. 10/10 would recommend.",photo:''}
   ],
   cal:'',
+  cta:{ heading:'Ready to Scale Your Content?', subtext:"Join creators and brands already growing with Druvo. Let's build something that performs.", btn1text:'Book a Free Call', btn1link:'#booking', btn2text:'View Our Work', btn2link:'#work' },
   social:{fb:'',ig:'',yt:'',li:''}
 };
 
@@ -508,6 +541,15 @@ function populateAll(){
   // Cal
   set('d-cal', S.cal||'');
   updateCalPreview();
+  // CTA
+  if(S.cta){
+    set('d-cta-h', S.cta.heading||'');
+    set('d-cta-sub', S.cta.subtext||'');
+    set('d-cta-b1t', S.cta.btn1text||'');
+    set('d-cta-b1l', S.cta.btn1link||'');
+    set('d-cta-b2t', S.cta.btn2text||'');
+    set('d-cta-b2l', S.cta.btn2link||'');
+  }
   // Social
   set('d-fb', S.social.fb||'');
   set('d-ig', S.social.ig||'');
@@ -558,6 +600,14 @@ function collectAll(){
     photo: _.photo||''
   }));
   S.cal = get('d-cal');
+  S.cta = {
+    heading:  get('d-cta-h')  || S.cta?.heading,
+    subtext:  get('d-cta-sub')|| S.cta?.subtext,
+    btn1text: get('d-cta-b1t')|| S.cta?.btn1text,
+    btn1link: get('d-cta-b1l')|| S.cta?.btn1link,
+    btn2text: get('d-cta-b2t')|| S.cta?.btn2text,
+    btn2link: get('d-cta-b2l')|| S.cta?.btn2link,
+  };
   S.social.fb = get('d-fb');
   S.social.ig = get('d-ig');
   S.social.yt = get('d-yt');
@@ -626,7 +676,7 @@ function renderTestiEditor(){
         <div id="tav-${i}" style="width:52px;height:52px;border-radius:50%;background:var(--bg4);border:1px solid var(--bdo);display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden;flex-shrink:0;">${t.photo?`<img src="${t.photo}" style="width:100%;height:100%;object-fit:cover;"/>`:'👤'}</div>
         <label style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--bdo);color:var(--primary);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.74rem;font-weight:600;">
           📷 Upload Photo
-          <input type="file" accept="image/*" style="display:none;" onchange="handleTestiPhoto(this,${i})"/>
+          <input type="file" accept="image/*,.heic,.heif" style="display:none;" onchange="handleTestiPhoto(this,${i})"/>
         </label>
         ${t.photo?`<button onclick="clearTestiPhoto(${i})" style="background:transparent;border:1px solid var(--bd);color:var(--cm35);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:.7rem;font-family:inherit;">Remove</button>`:''}
       </div>
@@ -660,35 +710,64 @@ function updateCalPreview(){
 document.addEventListener('input', e=>{ if(e.target.id==='d-cal') updateCalPreview(); });
 
 // ══════════════════════════════════════
-// PHOTO HANDLERS
+// PHOTO HANDLERS (HEIC supported)
 // ══════════════════════════════════════
+
+// Convert any image (including HEIC) to JPEG via Canvas
+function convertToJpeg(file, callback){
+  // For HEIC/HEIF, we use a blob URL + image element + canvas
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    // Limit max size to 1200px to keep file small for Supabase
+    const maxSize = 1200;
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if(w > maxSize || h > maxSize){
+      if(w > h){ h = Math.round(h * maxSize / w); w = maxSize; }
+      else { w = Math.round(w * maxSize / h); h = maxSize; }
+    }
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    callback(canvas.toDataURL('image/jpeg', 0.88));
+  };
+  img.onerror = () => {
+    URL.revokeObjectURL(url);
+    // Fallback: read as DataURL directly
+    const reader = new FileReader();
+    reader.onload = e => callback(e.target.result);
+    reader.readAsDataURL(file);
+  };
+  img.src = url;
+}
+
 function handleAboutPhoto(input){
   const file = input.files[0];
   if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    S.aboutPhoto = e.target.result;
+  toast('Converting photo...');
+  convertToJpeg(file, (dataUrl) => {
+    S.aboutPhoto = dataUrl;
     const p = document.getElementById('about-photo-preview');
-    if(p) p.innerHTML = `<img src="${S.aboutPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"/>`;
+    if(p) p.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"/>`;
     saveState();
     toast('Photo uploaded & saved ✓');
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function handleTestiPhoto(input, i){
   const file = input.files[0];
   if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    S.testi[i].photo = e.target.result;
+  toast('Converting photo...');
+  convertToJpeg(file, (dataUrl) => {
+    S.testi[i].photo = dataUrl;
     const av = document.getElementById('tav-'+i);
-    if(av) av.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;"/>`;
+    if(av) av.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;"/>`;
     saveState();
     toast('Client photo uploaded ✓');
     renderTestiEditor();
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function clearTestiPhoto(i){
@@ -721,6 +800,7 @@ const panelMeta = {
   work:     {icon:'🎬', title:'Portfolio / Our Work'},
   testi:    {icon:'💬', title:'Testimonials'},
   booking:  {icon:'📅', title:'Book a Call'},
+  cta:      {icon:'🚀', title:'CTA Section'},
   social:   {icon:'🔗', title:'Social Links'}
 };
 
