@@ -193,11 +193,11 @@ a{text-decoration:none;color:inherit;}
       <button class="sb-item" data-panel="booking" onclick="switchPanel('booking',this)">
         <span class="sb-ico">📅</span> Book a Call <span class="sb-dot"></span>
       </button>
-      <button class="sb-item" data-panel="cta" onclick="switchPanel('cta',this)">
-        <span class="sb-ico">🚀</span> CTA Section <span class="sb-dot"></span>
-      </button>
       <button class="sb-item" data-panel="social" onclick="switchPanel('social',this)">
         <span class="sb-ico">🔗</span> Social Links <span class="sb-dot"></span>
+      </button>
+      <button class="sb-item" data-panel="cta" onclick="switchPanel('cta',this)">
+        <span class="sb-ico">📧</span> CTA Section <span class="sb-dot"></span>
       </button>
     </nav>
     <div class="sb-bottom">
@@ -339,35 +339,6 @@ a{text-decoration:none;color:inherit;}
         <button class="add-btn" onclick="addTesti()">+ Add Testimonial</button>
       </div>
 
-      <!-- ── CTA ── -->
-      <div class="panel" id="panel-cta">
-        <div class="field-group">
-          <div class="fg-head">CTA Section Content</div>
-          <div class="fg-body">
-            <div class="f-field"><div class="f-label">Heading</div><input class="f-in" id="d-cta-h" placeholder="Ready to Scale Your Content?"/></div>
-            <div class="f-field"><div class="f-label">Subtext</div><textarea class="f-ta" id="d-cta-sub" style="min-height:64px;"></textarea></div>
-          </div>
-        </div>
-        <div class="field-group">
-          <div class="fg-head">Button 1 (Primary — Orange)</div>
-          <div class="fg-body">
-            <div class="f-row c2">
-              <div class="f-field"><div class="f-label">Button Text</div><input class="f-in" id="d-cta-b1t" placeholder="Book a Free Call"/></div>
-              <div class="f-field"><div class="f-label">Button Link</div><input class="f-in" id="d-cta-b1l" placeholder="https://calendly.com/... or #booking"/></div>
-            </div>
-          </div>
-        </div>
-        <div class="field-group">
-          <div class="fg-head">Button 2 (Secondary — Outline)</div>
-          <div class="fg-body">
-            <div class="f-row c2">
-              <div class="f-field"><div class="f-label">Button Text</div><input class="f-in" id="d-cta-b2t" placeholder="View Our Work"/></div>
-              <div class="f-field"><div class="f-label">Button Link</div><input class="f-in" id="d-cta-b2l" placeholder="#work or any URL"/></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- ── BOOKING ── -->
       <div class="panel" id="panel-booking">
         <div class="tip">💡 Paste your Calendly or Cal.com booking link. It will be embedded directly on your website so visitors can book without leaving the page.</div>
@@ -404,6 +375,26 @@ a{text-decoration:none;color:inherit;}
             <div class="f-row c2">
               <div class="f-field"><div class="f-label">YouTube</div><input class="f-in" id="d-yt" placeholder="https://youtube.com/@druvo"/></div>
               <div class="f-field"><div class="f-label">LinkedIn</div><input class="f-in" id="d-li" placeholder="https://linkedin.com/in/druvo"/></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CTA ── -->
+      <div class="panel" id="panel-cta">
+        <div class="field-group">
+          <div class="fg-head">Contact Email Address</div>
+          <div class="fg-body">
+            <div class="tip">💡 এখানে তোমার email দাও — website-এ "Or reach out directly" এর নিচে দেখাবে। Visitor click করলে তাদের email app খুলবে।</div>
+            <div class="f-field"><div class="f-label">Your Email Address</div><input class="f-in" id="d-cta-email" placeholder="hello@druvo.com"/></div>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="fg-head">CTA Buttons</div>
+          <div class="fg-body">
+            <div class="f-row c2">
+              <div class="f-field"><div class="f-label">Primary Button Text</div><input class="f-in" id="d-cta-b1" placeholder="Book a Free Call"/></div>
+              <div class="f-field"><div class="f-label">Secondary Button Text</div><input class="f-in" id="d-cta-b2" placeholder="View Our Work"/></div>
             </div>
           </div>
         </div>
@@ -457,7 +448,8 @@ const S = {
   cal:'',
   cta:{ heading:'Ready to Scale Your Content?', subtext:"Join creators and brands already growing with Druvo. Let's build something that performs.", btn1text:'Book a Free Call', btn1link:'#booking', btn2text:'View Our Work', btn2link:'#work' },
   social:{fb:'',ig:'',yt:'',li:''},
-  copyright:'© 2025 Druvo. All rights reserved.'
+  copyright:'© 2025 Druvo. All rights reserved.',
+  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' }
 };
 
 const KEY = 'druvo_v2';
@@ -557,6 +549,12 @@ function populateAll(){
     set('d-cta-b2t', S.cta.btn2text||'');
     set('d-cta-b2l', S.cta.btn2link||'');
   }
+  // CTA
+  if(S.cta){
+    set('d-cta-email', S.cta.email||'');
+    set('d-cta-b1',    S.cta.btn1||'');
+    set('d-cta-b2',    S.cta.btn2||'');
+  }
   // Social
   set('d-copy', S.copyright||'');
   set('d-fb', S.social.fb||'');
@@ -617,6 +615,11 @@ function collectAll(){
     btn2link: get('d-cta-b2l')|| S.cta?.btn2link,
   };
   S.copyright = get('d-copy')||S.copyright;
+  S.cta = {
+    email: get('d-cta-email')||S.cta?.email||'',
+    btn1:  get('d-cta-b1')  ||S.cta?.btn1,
+    btn2:  get('d-cta-b2')  ||S.cta?.btn2,
+  };
   S.social.fb = get('d-fb');
   S.social.ig = get('d-ig');
   S.social.yt = get('d-yt');
@@ -810,7 +813,8 @@ const panelMeta = {
   testi:    {icon:'💬', title:'Testimonials'},
   booking:  {icon:'📅', title:'Book a Call'},
   cta:      {icon:'🚀', title:'CTA Section'},
-  social:   {icon:'🔗', title:'Social Links'}
+  social:   {icon:'🔗', title:'Social Links'},
+  cta:      {icon:'📧', title:'CTA Section'}
 };
 
 function switchPanel(id, btn){

@@ -484,6 +484,27 @@ nav {
 .cta-h em { font-style:normal; color:var(--primary); }
 .cta-sub { font-size:.95rem; font-weight:300; color:var(--cream-muted); margin:20px 0 40px; position:relative; z-index:1; }
 .cta-btns { display:flex; gap:14px; justify-content:center; position:relative; z-index:1; }
+.cta-email-wrap {
+  display:flex; gap:0; max-width:440px; width:100%;
+  margin:0 auto 16px; position:relative; z-index:1;
+}
+.cta-email-input {
+  flex:1; background:rgba(255,247,232,.06);
+  border:1px solid var(--border-orange); border-right:none;
+  border-radius:8px 0 0 8px; padding:13px 18px;
+  font-size:.85rem; color:var(--cream); outline:none;
+  font-family:inherit; transition:border-color .2s;
+}
+.cta-email-input:focus { border-color:var(--primary); }
+.cta-email-input::placeholder { color:var(--cream-muted); }
+.cta-email-btn {
+  background:var(--primary); color:var(--dark);
+  border:none; border-radius:0 8px 8px 0;
+  padding:13px 22px; font-size:.8rem; font-weight:700;
+  letter-spacing:.04em; cursor:pointer; font-family:inherit;
+  transition:background .2s; white-space:nowrap;
+}
+.cta-email-btn:hover { background:var(--primary-light); }
 
 /* ── FOOTER ── */
 footer {
@@ -523,15 +544,18 @@ footer {
   .section-inner { max-width:100%; }
 
   /* about */
-  .about-grid { grid-template-columns:1fr; gap:36px; }
-  .about-visual { 
-    width:180px; height:180px; 
-    border-radius:50%; 
+  .about-grid { grid-template-columns:1fr; gap:32px; }
+  .about-visual {
+    width:100%;
+    max-width:340px;
+    height:280px;
+    border-radius:16px;
     margin:0 auto;
-    aspect-ratio:1;
+    aspect-ratio:unset;
   }
-  .about-bg-letter { font-size:6rem; }
-  .about-chips { display:none; }
+  .about-bg-letter { font-size:8rem; }
+  .about-chips { bottom:16px; left:16px; right:16px; gap:8px; }
+  .chip { font-size:.65rem; padding:5px 10px; }
 
   /* services */
   .services-head { flex-direction:column; align-items:flex-start; gap:20px; }
@@ -896,11 +920,15 @@ footer {
 <!-- ═══════════════ CTA ═══════════════ -->
 <section class="cta-section">
   <div class="cta-glow"></div>
-  <div class="cta-h">Ready to Scale<br>Your <em>Content?</em></div>
-  <p class="cta-sub">Join creators and brands already growing with Druvo.</p>
+  <div class="cta-h" id="s-cta-h">Ready to Scale<br>Your <em>Content?</em></div>
+  <p class="cta-sub" id="s-cta-sub">Join creators and brands already growing with Druvo.</p>
   <div class="cta-btns">
-    <a href="#booking" class="btn-fill">Book a Free Call</a>
-    <a href="#work" class="btn-outline">View Our Work</a>
+    <a href="#booking" class="btn-fill" id="s-cta-btn1">Book a Free Call</a>
+    <a href="#work" class="btn-outline" id="s-cta-btn2">View Our Work</a>
+  </div>
+  <div id="s-cta-email-wrap" style="margin-top:28px;position:relative;z-index:1;display:none;">
+    <p style="font-size:.78rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--cream-muted);margin-bottom:10px;">Or reach out directly</p>
+    <a id="s-cta-email-link" href="mailto:" style="font-size:1.05rem;font-weight:600;color:var(--primary);text-decoration:none;transition:all .3s;" onmouseover="this.style.color='#ff8c3a';this.style.textShadow='0 0 12px rgba(208,97,28,.9), 0 0 28px rgba(208,97,28,.5)'" onmouseout="this.style.color='var(--primary)';this.style.textShadow='none'"></a>
   </div>
 </section>
 
@@ -957,7 +985,8 @@ const S = {
   ],
   cal: '',
   social:{ fb:'', ig:'', yt:'', li:'' },
-  copyright: '© 2025 Druvo. All rights reserved.'
+  copyright: '© 2025 Druvo. All rights reserved.',
+  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' }
 };
 
 // ══════════════════════════════════════
@@ -1151,7 +1180,24 @@ function renderSocial(){
   if(cp) cp.textContent=S.copyright||'© 2025 Druvo. All rights reserved.';
 }
 
-function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderServices(); renderWork(); renderTesti(); renderCal(); renderSocial(); }
+function renderCta(){
+  const c = S.cta; if(!c) return;
+  const b1 = document.getElementById('s-cta-btn1');
+  const b2 = document.getElementById('s-cta-btn2');
+  const wrap = document.getElementById('s-cta-email-wrap');
+  const link = document.getElementById('s-cta-email-link');
+  if(b1) b1.textContent = c.btn1||'Book a Free Call';
+  if(b2) b2.textContent = c.btn2||'View Our Work';
+  if(c.email && wrap && link){
+    wrap.style.display = 'block';
+    link.textContent = c.email;
+    link.href = 'mailto:' + c.email;
+  } else if(wrap){
+    wrap.style.display = 'none';
+  }
+}
+
+function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderServices(); renderWork(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
 
 // ══════════════════════════════════════
 // CURSOR
