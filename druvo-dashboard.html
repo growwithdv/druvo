@@ -181,6 +181,9 @@ a{text-decoration:none;color:inherit;}
       <button class="sb-item" data-panel="about" onclick="switchPanel('about',this)">
         <span class="sb-ico">👤</span> About Section <span class="sb-dot"></span>
       </button>
+      <button class="sb-item" data-panel="clients" onclick="switchPanel('clients',this)">
+        <span class="sb-ico">🌟</span> Client Showcase <span class="sb-dot"></span>
+      </button>
       <button class="sb-item" data-panel="services" onclick="switchPanel('services',this)">
         <span class="sb-ico">⚡</span> Services <span class="sb-dot"></span>
       </button>
@@ -306,6 +309,13 @@ a{text-decoration:none;color:inherit;}
             <button class="add-btn" onclick="addAboutLi()">+ Add Bullet Point</button>
           </div>
         </div>
+      </div>
+
+      <!-- ── SERVICES ── -->
+      <div class="panel" id="panel-clients">
+        <div class="tip">💡 প্রতিটি client-এর Instagram username, profile photo, followers, growth result এবং IG profile link দাও। Card-এ IG mockup style-এ দেখাবে।</div>
+        <div class="items-list" id="clients-editor"></div>
+        <button class="add-btn" onclick="addClient()">+ Add Client</button>
       </div>
 
       <!-- ── SERVICES ── -->
@@ -449,7 +459,10 @@ const S = {
   cta:{ heading:'Ready to Scale Your Content?', subtext:"Join creators and brands already growing with Druvo. Let's build something that performs.", btn1text:'Book a Free Call', btn1link:'#booking', btn2text:'View Our Work', btn2link:'#work' },
   social:{fb:'',ig:'',yt:'',li:''},
   copyright:'© 2025 Druvo. All rights reserved.',
-  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' }
+  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' },
+  clients:[
+    {username:'@clientusername', name:'Client Name', posts:'120', followers:'213K', following:'28', desc:'Content creator & entrepreneur', growth:'0 → 213K engaged followers', result:'Positioned as the go-to authority, attracting premium partnerships', igLink:'https://instagram.com', photo:''}
+  ]
 };
 
 const KEY = 'druvo_v2';
@@ -531,6 +544,8 @@ function populateAll(){
   set('d-about1', S.about.p1);
   set('d-about2', S.about.p2);
   renderAboutListEditor();
+  // Clients
+  renderClientsEditor();
   // Services
   renderServicesEditor();
   // Work
@@ -583,6 +598,18 @@ function collectAll(){
   S.about.p1 = get('d-about1')||S.about.p1;
   S.about.p2 = get('d-about2')||S.about.p2;
   S.about.list = S.about.list.map((_,i)=>{ const el=document.getElementById('ali-'+i); return el?el.value:_; });
+  S.clients = (S.clients||[]).map((_,i)=>({
+    username: document.getElementById('cu-'+i)?.value||_.username,
+    name:     document.getElementById('cn-'+i)?.value||_.name,
+    desc:     document.getElementById('cd-'+i)?.value||_.desc,
+    igLink:   document.getElementById('cl-'+i)?.value||_.igLink,
+    posts:    document.getElementById('cp-'+i)?.value||_.posts,
+    followers:document.getElementById('cf-'+i)?.value||_.followers,
+    following:document.getElementById('cfw-'+i)?.value||_.following,
+    growth:   document.getElementById('cg-'+i)?.value||_.growth,
+    result:   document.getElementById('cr-'+i)?.value||_.result,
+    photo:    _.photo||''
+  }));
   S.services = S.services.map((_,i)=>({
     icon: document.getElementById('svi-'+i)?.value||_.icon,
     name: document.getElementById('svn-'+i)?.value||_.name,
@@ -629,7 +656,53 @@ function collectAll(){
 // ══════════════════════════════════════
 // EDITORS
 // ══════════════════════════════════════
-function renderAboutListEditor(){
+function renderClientsEditor(){
+  document.getElementById('clients-editor').innerHTML = (S.clients||[]).map((c,i)=>`
+    <div class="d-item">
+      <div class="d-item-num">Client ${i+1}</div>
+      <button class="d-item-del" onclick="removeClient(${i})">✕</button>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:4px;">
+        <div id="cav-${i}" style="width:52px;height:52px;border-radius:50%;background:var(--bg4);border:2px solid var(--bdo);display:flex;align-items:center;justify-content:center;font-size:1.3rem;overflow:hidden;flex-shrink:0;">${c.photo?`<img src="${c.photo}" style="width:100%;height:100%;object-fit:cover;"/>`:'👤'}</div>
+        <label style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--bdo);color:var(--primary);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.74rem;font-weight:600;">
+          📷 Profile Photo
+          <input type="file" accept="image/*,.heic,.heif" style="display:none;" onchange="handleClientPhoto(this,${i})"/>
+        </label>
+        ${c.photo?`<button onclick="clearClientPhoto(${i})" style="background:transparent;border:1px solid var(--bd);color:var(--cm35);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:.7rem;font-family:inherit;">Remove</button>`:''}
+      </div>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Username (with @)</div><input class="f-in" id="cu-${i}" value="${esc(c.username||'')}" placeholder="@username"/></div>
+        <div class="f-field"><div class="f-label">Full Name</div><input class="f-in" id="cn-${i}" value="${esc(c.name||'')}" placeholder="Client Name"/></div>
+      </div>
+      <div class="f-row c2">
+        <div class="f-field"><div class="f-label">Short Bio / Description</div><input class="f-in" id="cd-${i}" value="${esc(c.desc||'')}" placeholder="Content creator & entrepreneur"/></div>
+        <div class="f-field"><div class="f-label">Instagram Profile Link</div><input class="f-in" id="cl-${i}" value="${esc(c.igLink||'')}" placeholder="https://instagram.com/username"/></div>
+      </div>
+      <div class="f-row c3">
+        <div class="f-field"><div class="f-label">Posts</div><input class="f-in" id="cp-${i}" value="${esc(c.posts||'')}" placeholder="120"/></div>
+        <div class="f-field"><div class="f-label">Followers</div><input class="f-in" id="cf-${i}" value="${esc(c.followers||'')}" placeholder="213K"/></div>
+        <div class="f-field"><div class="f-label">Following</div><input class="f-in" id="cfw-${i}" value="${esc(c.following||'')}" placeholder="28"/></div>
+      </div>
+      <div class="f-field"><div class="f-label">Growth Result (e.g. 0 → 213K engaged followers)</div><input class="f-in" id="cg-${i}" value="${esc(c.growth||'')}" placeholder="0 → 213K engaged followers"/></div>
+      <div class="f-field"><div class="f-label">Result Description</div><textarea class="f-ta" id="cr-${i}" style="min-height:52px;">${esc(c.result||'')}</textarea></div>
+    </div>`).join('');
+}
+function addClient(){
+  if(!S.clients) S.clients=[];
+  S.clients.push({username:'@username',name:'Client Name',posts:'0',followers:'0K',following:'0',desc:'',growth:'0 → 0K followers',result:'',igLink:'https://instagram.com',photo:''});
+  renderClientsEditor();
+}
+function removeClient(i){ S.clients.splice(i,1); renderClientsEditor(); }
+function handleClientPhoto(input,i){
+  const file=input.files[0]; if(!file) return;
+  toast('Converting...');
+  convertToJpeg(file,dataUrl=>{
+    S.clients[i].photo=dataUrl;
+    const av=document.getElementById('cav-'+i);
+    if(av) av.innerHTML=`<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;"/>`;
+    saveState(); toast('Photo saved ✓'); renderClientsEditor();
+  });
+}
+function clearClientPhoto(i){ S.clients[i].photo=''; saveState(); renderClientsEditor(); }
   document.getElementById('about-list-editor').innerHTML = S.about.list.map((t,i)=>`
     <div class="d-item" style="flex-direction:row;align-items:center;padding:10px 14px;gap:8px;">
       <input class="f-in" id="ali-${i}" value="${esc(t)}" style="flex:1;"/>
@@ -808,6 +881,7 @@ const panelMeta = {
   hero:     {icon:'🏠', title:'Hero Section'},
   showreel: {icon:'▶',  title:'Showreel Video'},
   about:    {icon:'👤', title:'About Section'},
+  clients:  {icon:'🌟', title:'Client Showcase'},
   services: {icon:'⚡', title:'Services'},
   work:     {icon:'🎬', title:'Portfolio / Our Work'},
   testi:    {icon:'💬', title:'Testimonials'},

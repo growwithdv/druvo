@@ -506,6 +506,70 @@ nav {
 }
 .cta-email-btn:hover { background:var(--primary-light); }
 
+/* ── CLIENT SHOWCASE ── */
+.showcase { background:var(--dark3); }
+.showcase-head { text-align:center; margin-bottom:56px; }
+.showcase-head .eyebrow { justify-content:center; }
+.showcase-head .section-h { margin-top:14px; }
+.showcase-sub { font-size:.95rem; font-weight:300; color:var(--cream-muted); margin-top:14px; }
+.showcase-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.sc-card {
+  background:var(--dark); border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+  transition:transform .25s, box-shadow .25s, border-color .25s;
+  cursor:pointer;
+}
+.sc-card:hover { transform:translateY(-5px); box-shadow:0 20px 48px rgba(0,0,0,.5); border-color:var(--border-orange); }
+/* IG mockup top */
+.sc-ig-top {
+  background:#fff; padding:14px 14px 10px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.sc-ig-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:.72rem; color:#000; font-weight:500;
+}
+.sc-ig-nav-left { display:flex; align-items:center; gap:6px; }
+.sc-ig-back { font-size:.85rem; color:#000; }
+.sc-ig-username { font-size:.82rem; font-weight:700; color:#000; }
+.sc-ig-nav-right { display:flex; gap:12px; color:#000; font-size:.9rem; }
+.sc-ig-profile { display:flex; align-items:center; gap:10px; }
+.sc-ig-avatar {
+  width:52px; height:52px; border-radius:50%;
+  background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  padding:2px; flex-shrink:0;
+}
+.sc-ig-avatar-inner {
+  width:100%; height:100%; border-radius:50%;
+  background:#fff; display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.sc-ig-avatar-inner img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+.sc-ig-avatar-inner span { font-size:1.3rem; }
+.sc-ig-info { flex:1; }
+.sc-ig-name { font-size:.82rem; font-weight:700; color:#000; margin-bottom:2px; }
+.sc-ig-desc { font-size:.68rem; color:#555; line-height:1.4; }
+.sc-ig-stats { display:flex; gap:0; text-align:center; }
+.sc-ig-stat { flex:1; display:flex; flex-direction:column; gap:2px; }
+.sc-ig-stat-n { font-size:.82rem; font-weight:700; color:#000; }
+.sc-ig-stat-l { font-size:.62rem; color:#888; }
+.sc-ig-stat + .sc-ig-stat { border-left:1px solid #eee; }
+/* card bottom */
+.sc-card-body { padding:18px 18px 20px; }
+.sc-client-name { font-size:1rem; font-weight:700; color:var(--cream); margin-bottom:6px; }
+.sc-growth { font-size:.82rem; font-weight:700; color:var(--primary); margin-bottom:8px; }
+.sc-desc { font-size:.78rem; font-weight:300; line-height:1.6; color:var(--cream-muted); margin-bottom:14px; }
+.sc-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:.75rem; font-weight:600; color:var(--cream-muted);
+  text-decoration:none; transition:color .2s;
+}
+.sc-link:hover { color:var(--primary); }
+.sc-link::before { content:''; width:14px; height:14px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D0611C'%3E%3Cpath d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/%3E%3C/svg%3E") no-repeat center/contain; flex-shrink:0; }
+
+@media(max-width:900px){ .showcase-grid { grid-template-columns:1fr 1fr; } }
+@media(max-width:480px){ .showcase-grid { grid-template-columns:1fr; } }
+
 /* ── FOOTER ── */
 footer {
   padding:48px; background:var(--dark2);
@@ -715,6 +779,18 @@ footer {
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CLIENT SHOWCASE ═══════════════ -->
+<section class="section showcase" id="clients">
+  <div class="section-inner">
+    <div class="showcase-head reveal">
+      <div class="eyebrow">Proven Authority</div>
+      <h2 class="section-h">From Unknown to <em>Undeniable</em></h2>
+      <p class="showcase-sub">See how we positioned our clients as industry authorities, driving premium opportunities and measurable growth.</p>
+    </div>
+    <div class="showcase-grid" id="showcase-grid"><!-- JS rendered --></div>
   </div>
 </section>
 
@@ -986,7 +1062,12 @@ const S = {
   cal: '',
   social:{ fb:'', ig:'', yt:'', li:'' },
   copyright: '© 2025 Druvo. All rights reserved.',
-  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' }
+  cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' },
+  clients:[
+    {username:'@clientusername', name:'Client Name', posts:'120', followers:'213K', following:'28', desc:'Content creator & entrepreneur', growth:'0 → 213K engaged followers', result:'Positioned as the go-to authority, attracting premium partnerships', igLink:'https://instagram.com', photo:''},
+    {username:'@clientusername2', name:'Client Name 2', posts:'92', followers:'47K', following:'775', desc:'Brand & content strategist', growth:'0 → 47K targeted followers', result:'Established niche dominance through authority content', igLink:'https://instagram.com', photo:''},
+    {username:'@clientusername3', name:'Client Name 3', posts:'285', followers:'194K', following:'72', desc:'Personal brand & designer', growth:'0 → 194K authority-driven followers', result:'Transformed personal brand into a high-ticket client acquisition engine', igLink:'https://instagram.com', photo:''}
+  ]
 };
 
 // ══════════════════════════════════════
@@ -1197,7 +1278,47 @@ function renderCta(){
   }
 }
 
-function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderServices(); renderWork(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
+function renderClients(){
+  const grid = document.getElementById('showcase-grid');
+  if(!grid || !S.clients?.length) return;
+  grid.innerHTML = S.clients.map(c=>`
+    <div class="sc-card reveal" onclick="window.open('${c.igLink||'https://instagram.com'}','_blank')">
+      <div class="sc-ig-top">
+        <div class="sc-ig-nav">
+          <div class="sc-ig-nav-left">
+            <span class="sc-ig-back">←</span>
+            <span class="sc-ig-username">${c.username||'@username'}</span>
+          </div>
+          <div class="sc-ig-nav-right"><span>🔔</span><span>⋯</span></div>
+        </div>
+        <div class="sc-ig-profile">
+          <div class="sc-ig-avatar">
+            <div class="sc-ig-avatar-inner">
+              ${c.photo ? `<img src="${c.photo}" alt="${c.name}"/>` : `<span>👤</span>`}
+            </div>
+          </div>
+          <div class="sc-ig-info">
+            <div class="sc-ig-name">${c.name||'Client Name'}</div>
+            <div class="sc-ig-desc">${c.desc||''}</div>
+          </div>
+        </div>
+        <div class="sc-ig-stats">
+          <div class="sc-ig-stat"><div class="sc-ig-stat-n">${c.posts||'0'}</div><div class="sc-ig-stat-l">posts</div></div>
+          <div class="sc-ig-stat"><div class="sc-ig-stat-n">${c.followers||'0'}</div><div class="sc-ig-stat-l">followers</div></div>
+          <div class="sc-ig-stat"><div class="sc-ig-stat-n">${c.following||'0'}</div><div class="sc-ig-stat-l">following</div></div>
+        </div>
+      </div>
+      <div class="sc-card-body">
+        <div class="sc-client-name">${c.name||'Client Name'}</div>
+        <div class="sc-growth">${c.growth||'0 → 0 followers'}</div>
+        <div class="sc-desc">${c.result||''}</div>
+        <a class="sc-link" href="${c.igLink||'#'}" target="_blank" onclick="event.stopPropagation()">Click to view profile ↗</a>
+      </div>
+    </div>`).join('');
+  reObserve(grid);
+}
+
+function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderClients(); renderServices(); renderWork(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
 
 // ══════════════════════════════════════
 // CURSOR
