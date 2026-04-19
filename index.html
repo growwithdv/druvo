@@ -1032,6 +1032,7 @@ const S = {
     s1l:'Projects Delivered', s2l:'Videos Edited', s3l:'Views Generated' },
   showreel: '',
   aboutPhoto: '',
+  aboutPhoto: '',
   about:{ p1:"Druvo is not just a video editing agency. We're a full-stack content partner for creators, entrepreneurs, and brands who are serious about building an audience and scaling their presence.",
     p2:'Every frame we touch is engineered to stop the scroll, build trust, and convert viewers into followers — and followers into customers.',
     list:['Results-driven creative strategy','Platform-native content optimization','Fast turnaround, zero compromise on quality','Dedicated partner — not just a vendor'] },
@@ -1081,7 +1082,7 @@ async function sbFetch(data){
   const res = await fetch(`${SB_URL}/rest/v1/site_content?id=eq.${ROW_ID}`,{
     method:'PATCH',
     headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
-    body: JSON.stringify({data})
+    body: JSON.stringify({data, updated_at: new Date().toISOString()})
   });
   return res.ok;
 }
@@ -1102,23 +1103,37 @@ async function save(){
 }
 
 async function load(){
+  let remote = null;
   // try Supabase first
   try{
-    const remote = await sbLoad();
-    if(remote && Object.keys(remote).length > 0){
-      Object.keys(remote).forEach(k=>{
-        if(!(k in S)) return;
-        if(typeof remote[k]==='object'&&!Array.isArray(remote[k])&&remote[k]!==null) Object.assign(S[k], remote[k]);
-        else S[k] = remote[k];
-      });
-      return;
-    }
+    remote = await sbLoad();
   }catch(e){}
+
   // fallback to localStorage
-  try{
-    const d = localStorage.getItem('druvo_v2');
-    if(d){ const p=JSON.parse(d); Object.keys(p).forEach(k=>{ if(typeof p[k]==='object'&&!Array.isArray(p[k])&&p[k]!==null) Object.assign(S[k],p[k]); else S[k]=p[k]; }); }
-  }catch(e){}
+  if(!remote || Object.keys(remote).length === 0){
+    try{
+      const d = localStorage.getItem('druvo_v2');
+      if(d) remote = JSON.parse(d);
+    }catch(e){}
+  }
+
+  if(!remote) return;
+
+  Object.keys(remote).forEach(k=>{
+    if(!(k in S)) return;
+    const rv = remote[k];
+    const sv = S[k];
+    if(Array.isArray(rv)){
+      // arrays — replace entirely
+      S[k] = rv;
+    } else if(rv !== null && typeof rv === 'object' && typeof sv === 'object' && !Array.isArray(sv)){
+      // plain objects — merge
+      Object.assign(S[k], rv);
+    } else {
+      // primitives (strings, numbers) — replace
+      S[k] = rv;
+    }
+  });
 }
 
 function ytId(url){ const m=(url||'').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^&?\/\s]{11})/); return m?m[1]:null; }
