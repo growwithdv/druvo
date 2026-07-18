@@ -163,6 +163,7 @@ html,body{height:100%;font-family:var(--f);-webkit-font-smoothing:antialiased;ba
     <button class="sb-btn" onclick="show('clients',this)"><span class="sb-ico">🌟</span>Client Showcase</button>
     <button class="sb-btn" onclick="show('services',this)"><span class="sb-ico">⚡</span>Services</button>
     <button class="sb-btn" onclick="show('work',this)"><span class="sb-ico">🎬</span>Portfolio</button>
+    <button class="sb-btn" onclick="show('process',this)"><span class="sb-ico">⚙️</span>Our Process</button>
     <button class="sb-btn" onclick="show('testi',this)"><span class="sb-ico">💬</span>Testimonials</button>
     <button class="sb-btn" onclick="show('booking',this)"><span class="sb-ico">📅</span>Book a Call</button>
     <button class="sb-btn" onclick="show('cta',this)"><span class="sb-ico">📧</span>CTA Section</button>
@@ -262,6 +263,33 @@ html,body{height:100%;font-family:var(--f);-webkit-font-smoothing:antialiased;ba
       <div class="card"><div class="card-head">Long Form Videos</div><div class="card-body">
         <div class="item-list" id="long-list"></div>
         <button class="add-btn" onclick="addWork('long')">+ Add Long Form Video</button>
+      </div></div>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="panel" id="p-process">
+      <div class="card"><div class="card-head">Step Names</div><div class="card-body">
+        <div class="tip">💡 ৪টা step-এর নাম দাও — website-এ center image-এর চারপাশে দেখাবে।</div>
+        <div class="row2">
+          <div><div class="lbl">Step 1 (One)</div><input class="inp" id="proc-s1" placeholder="Discovery Call"/></div>
+          <div><div class="lbl">Step 2 (Two)</div><input class="inp" id="proc-s2" placeholder="Creative Brief"/></div>
+        </div>
+        <div class="row2">
+          <div><div class="lbl">Step 3 (Three)</div><input class="inp" id="proc-s3" placeholder="Production"/></div>
+          <div><div class="lbl">Step 4 (Four)</div><input class="inp" id="proc-s4" placeholder="Deliver & Grow"/></div>
+        </div>
+      </div></div>
+      <div class="card"><div class="card-head">Center Image</div><div class="card-body">
+        <div class="tip">💡 Center-এ যে image দেখাবে — keyboard keys বা যেকোনো product/process visual দাও।</div>
+        <div class="photo-row">
+          <div class="photo-prev" id="proc-img-prev" style="width:100px;height:100px;border-radius:12px;">🎬</div>
+          <label class="upload-lbl">📷 Upload Image<input type="file" accept="image/*,.heic,.heif" style="display:none" onchange="uploadPhoto(this,'process')"/></label>
+          <button class="remove-btn" onclick="S.process.centerImg='';const p=document.getElementById('proc-img-prev');if(p)p.innerHTML='🎬';saveData();">Remove</button>
+        </div>
+      </div></div>
+      <div class="card"><div class="card-head">Process Video</div><div class="card-body">
+        <div class="tip">💡 "Watch Process in detail" bar-এ click করলে এই video popup-এ play হবে।</div>
+        <div><div class="lbl">YouTube URL</div><input class="inp" id="proc-video" placeholder="https://www.youtube.com/watch?v=..."/></div>
       </div></div>
     </div>
 
@@ -386,6 +414,7 @@ const S={
   ],
   cal:'',
   cta:{email:'',btn1:'Book a Free Call',btn2:'View Our Work'},
+  process:{steps:['Discovery Call','Creative Brief','Production','Deliver & Grow'],centerImg:'',videoUrl:''},
   copyright:'© 2025 Druvo. All rights reserved.',
   social:{fb:'',ig:'',yt:'',li:''}
 };
@@ -446,6 +475,13 @@ function populate(){
   renderWork();
   // Testi
   renderTesti();
+  // Process
+  if(S.process){
+    s('proc-s1',(S.process.steps||[])[0]); s('proc-s2',(S.process.steps||[])[1]);
+    s('proc-s3',(S.process.steps||[])[2]); s('proc-s4',(S.process.steps||[])[3]);
+    s('proc-video',S.process.videoUrl||'');
+    if(S.process.centerImg){const p=document.getElementById('proc-img-prev');if(p)p.innerHTML=`<img src="${S.process.centerImg}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"/>`;}
+  }
   // Booking
   s('d-cal',S.cal);
   // CTA
@@ -493,6 +529,9 @@ function collect(){
   S.cta={email:g('d-cta-email')||S.cta?.email||'',btn1:g('d-cta-b1')||S.cta?.btn1||'Book a Free Call',btn2:g('d-cta-b2')||S.cta?.btn2||'View Our Work'};
   S.copyright=g('d-copy')||S.copyright;
   S.social={fb:g('d-fb'),ig:g('d-ig'),yt:g('d-yt'),li:g('d-li')};
+  if(!S.process) S.process={steps:[],centerImg:'',videoUrl:''};
+  S.process.steps=[g('proc-s1')||'Discovery Call',g('proc-s2')||'Creative Brief',g('proc-s3')||'Production',g('proc-s4')||'Deliver & Grow'];
+  S.process.videoUrl=g('proc-video')||S.process.videoUrl||'';
 }
 
 // ═══════════════════════════════
@@ -623,6 +662,11 @@ function uploadPhoto(input,type,idx){
       S.aboutPhoto=data;
       const p=document.getElementById('about-prev');
       if(p)p.innerHTML=`<img src="${data}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"/>`;
+    } else if(type==='process'){
+      if(!S.process) S.process={steps:[],centerImg:'',videoUrl:''};
+      S.process.centerImg=data;
+      const p=document.getElementById('proc-img-prev');
+      if(p)p.innerHTML=`<img src="${data}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"/>`;
     } else if(type==='client'){
       S.clients[idx].photo=data;renderClients();
     } else if(type==='testi'){
@@ -655,6 +699,7 @@ async function saveAll(){
 const PANELS={
   hero:'🏠 Hero Section',showreel:'▶ Showreel Video',about:'👤 About Section',
   clients:'🌟 Client Showcase',services:'⚡ Services',work:'🎬 Portfolio',
+  process:'⚙️ Our Process',
   testi:'💬 Testimonials',booking:'📅 Book a Call',cta:'📧 CTA Section',social:'🔗 Social & Footer'
 };
 function show(id,btn){

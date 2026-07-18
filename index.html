@@ -313,62 +313,208 @@ nav {
 .work-tabs {
   display:inline-flex; gap:2px; background:var(--dark3);
   border:1px solid var(--border); border-radius:10px; padding:4px;
-  margin:40px 0 48px;
+  margin:40px 0 40px;
 }
 .tab-btn {
   font-size:.78rem; font-weight:600; letter-spacing:.06em;
   padding:9px 24px; border-radius:7px; border:none; cursor:pointer;
   background:transparent; color:var(--cream-muted);
-  transition: background .2s, color .2s;
+  transition: background .2s, color .2s; font-family:inherit;
 }
 .tab-btn.active { background:var(--primary); color:var(--dark); }
-.work-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+/* Long Form: 2 col, 16:9 */
+.work-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.work-grid .work-thumb { aspect-ratio:16/9; }
+
+/* Short Form: 4 col, 9:16 — smaller on PC */
+.long-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.long-grid .work-thumb { aspect-ratio:9/16; }
+
 .work-card {
-  background:var(--dark3); border:1px solid var(--border); border-radius:12px;
+  background:var(--dark3); border:1px solid var(--border); border-radius:10px;
   overflow:hidden; transition:transform .25s, box-shadow .25s;
   cursor:pointer;
 }
-.work-card:hover { transform:translateY(-4px); box-shadow:0 20px 48px rgba(0,0,0,.5); }
+.work-card:hover { transform:translateY(-3px); box-shadow:0 14px 36px rgba(0,0,0,.5); }
 .work-thumb {
-  aspect-ratio:9/16; background:var(--dark4);
+  background:var(--dark4);
   display:flex; align-items:center; justify-content:center;
   position:relative; overflow:hidden;
 }
-.work-thumb.landscape { aspect-ratio:16/9; }
 .work-thumb-bg {
   position:absolute; inset:0;
   background: linear-gradient(135deg, rgba(208,97,28,.08) 0%, transparent 60%);
 }
-.work-thumb-icon { font-size:2.5rem; z-index:1; }
-.work-play {
+.work-thumb img.wt-thumb { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+.work-thumb-icon { font-size:2rem; z-index:1; }
+.work-play-btn {
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.4); opacity:0; transition:opacity .25s;
+  background:rgba(0,0,0,.35); transition:background .25s; z-index:2;
 }
-.work-card:hover .work-play { opacity:1; }
-.wplay { width:48px; height:48px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; padding-left:3px; }
-.work-meta { padding:16px 18px; }
-.work-title { font-size:.88rem; font-weight:600; color:var(--cream); margin-bottom:6px; }
-.work-tag { font-size:.72rem; font-weight:500; color:var(--primary); letter-spacing:.06em; }
-
-.long-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.work-card:hover .work-play-btn { background:rgba(0,0,0,.5); }
+.wplay {
+  width:40px; height:40px; background:var(--primary); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.9rem; padding-left:3px;
+  box-shadow:0 0 0 8px rgba(208,97,28,.2);
+  transition:transform .2s;
+}
+.work-card:hover .wplay { transform:scale(1.1); }
+.work-meta { padding:12px 14px; }
+.work-title { font-size:.82rem; font-weight:600; color:var(--cream); margin-bottom:4px; }
+.work-tag { font-size:.68rem; font-weight:500; color:var(--primary); letter-spacing:.04em; }
 
 /* ── PROCESS ── */
-.process { background:var(--dark); }
-.process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:40px; margin-top:64px; }
-.proc-step { position:relative; }
-.proc-step:not(:last-child)::after {
-  content:''; position:absolute;
-  top:24px; left:calc(50% + 28px); right:calc(-50% + 28px);
-  height:1px; background:linear-gradient(90deg,var(--border-orange),transparent);
+.process { background:var(--dark); overflow:hidden; }
+.process-inner { max-width:1100px; margin:0 auto; }
+.process-top { text-align:center; margin-bottom:80px; }
+.process-top .section-h { margin-bottom:12px; }
+.process-top p { font-size:.95rem; font-weight:400; color:var(--cream-muted); }
+
+.process-layout {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:0;
+  align-items:center;
+  position:relative;
+  min-height:520px;
 }
-.proc-n {
-  width:48px; height:48px; border:1.5px solid var(--border-orange); border-radius:50%;
+/* left steps */
+.proc-left { display:flex; flex-direction:column; gap:80px; padding-right:40px; }
+/* right steps */
+.proc-right { display:flex; flex-direction:column; gap:80px; padding-left:40px; }
+/* center image */
+.proc-center { display:flex; align-items:center; justify-content:center; position:relative; }
+.proc-center-img {
+  width:100%; max-width:360px;
+  aspect-ratio:1;
+  border-radius:0;
+  overflow:visible;
+  background:transparent;
+  border:none;
   display:flex; align-items:center; justify-content:center;
-  font-size:.85rem; font-weight:700; color:var(--primary);
-  margin-bottom:24px; position:relative; z-index:1; background:var(--dark);
 }
-.proc-title { font-size:.95rem; font-weight:600; color:var(--cream); margin-bottom:10px; }
-.proc-desc { font-size:.82rem; font-weight:300; line-height:1.7; color:rgba(255,247,232,.4); }
+.proc-center-img img {
+  width:100%; height:100%;
+  object-fit:contain;
+  border-radius:0;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,.4));
+}
+.proc-center-placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  color:var(--cream-muted);
+}
+.proc-center-placeholder span { font-size:4rem; }
+.proc-center-placeholder p { font-size:.78rem; text-align:center; padding:0 20px; }
+
+/* watch video bar */
+.proc-video-bar {
+  position:absolute; bottom:-24px; left:50%; transform:translateX(-50%);
+  background:var(--dark2); border:1px solid var(--border);
+  border-radius:12px; padding:10px 16px;
+  display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:border-color .25s, transform .2s;
+  white-space:nowrap; min-width:220px;
+}
+.proc-video-bar:hover { border-color:var(--border-orange); transform:translateX(-50%) translateY(-2px); }
+.proc-video-thumb {
+  width:44px; height:36px; border-radius:6px;
+  background:var(--dark4); border:1px solid var(--border-orange);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.8rem; flex-shrink:0; overflow:hidden;
+}
+.proc-video-thumb img { width:100%; height:100%; object-fit:cover; }
+.proc-video-text { flex:1; }
+.proc-video-label { font-size:.78rem; font-weight:600; color:var(--cream); }
+.proc-video-sub { font-size:.68rem; color:var(--cream-muted); margin-top:2px; }
+.proc-video-arrow { font-size:.9rem; color:var(--primary); }
+
+/* step items */
+.proc-item { }
+.proc-item-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,247,232,.06); border:1px solid var(--border);
+  border-radius:100px; padding:4px 12px 4px 6px;
+  margin-bottom:14px;
+}
+.proc-item-badge-icon {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--dark4); border:1px solid var(--border-orange);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.6rem; color:var(--primary); font-weight:700;
+}
+.proc-item-badge-text { font-size:.72rem; font-weight:500; color:var(--cream-muted); }
+.proc-item-title {
+  font-size:1.8rem; font-weight:700; letter-spacing:-.03em;
+  color:var(--cream); line-height:1.1;
+}
+.proc-right .proc-item { text-align:right; }
+.proc-right .proc-item-badge { flex-direction:row-reverse; }
+
+/* modal */
+.proc-modal {
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,.85); backdrop-filter:blur(12px);
+  display:none; align-items:center; justify-content:center;
+  padding:24px;
+}
+.proc-modal.open { display:flex; }
+.proc-modal-inner {
+  width:100%; max-width:900px;
+  background:var(--dark2); border:1px solid var(--border-orange);
+  border-radius:16px; overflow:hidden; position:relative;
+}
+.proc-modal-close {
+  position:absolute; top:12px; right:12px; z-index:10;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(0,0,0,.6); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1rem; color:var(--cream);
+  transition:background .2s;
+}
+.proc-modal-close:hover { background:var(--primary); }
+.proc-modal-video { position:relative; padding-top:56.25%; }
+.proc-modal-video iframe {
+  position:absolute; inset:0; width:100%; height:100%; border:none;
+}
+.proc-modal-ph {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:12px; background:var(--dark3);
+}
+.proc-modal-ph span { font-size:3rem; }
+.proc-modal-ph p { font-size:.85rem; color:var(--cream-muted); }
+
+/* liquid glass badge */
+.proc-item-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,247,232,.06);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255,247,232,.12);
+  box-shadow: 0 2px 12px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.07);
+  border-radius:100px; padding:4px 12px 4px 6px;
+  margin-bottom:14px;
+}
+.proc-steps-mobile { display:none; }
+
+@media(max-width:900px){
+  .process-layout {
+    display:flex; flex-direction:column; gap:0; min-height:auto;
+  }
+  .proc-center { order:0; padding:0 0 32px; }
+  .proc-video-bar { position:static; transform:none; margin:0 auto; }
+  .proc-video-bar:hover { transform:translateY(-2px); }
+  /* hide desktop left/right on mobile */
+  .proc-left, .proc-right { display:none; }
+  /* show mobile grid */
+  .proc-steps-mobile {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:20px; margin-top:8px;
+  }
+  .proc-item-title { font-size:1.1rem; }
+}
 
 /* ── TESTIMONIALS ── */
 .testi { background:var(--dark2); }
@@ -640,9 +786,12 @@ footer {
   .services-grid { grid-template-columns:1fr; }
   .svc-card { padding:32px 24px; }
 
-  /* work */
-  .work-grid { grid-template-columns:1fr 1fr; }
-  .long-grid { grid-template-columns:1fr; }
+  /* work — short: 1col mobile (9:16), long: 2col mobile (16:9) */
+  .long-grid { grid-template-columns:1fr; gap:10px; }
+  .work-grid { grid-template-columns:1fr 1fr; gap:10px; }
+  .work-meta { padding:8px 10px; }
+  .work-title { font-size:.78rem; }
+  .work-tag { font-size:.64rem; }
 
   /* process */
   .process-steps { grid-template-columns:1fr 1fr; gap:32px; }
@@ -672,11 +821,10 @@ footer {
 
 @media(max-width:480px){
   .hero-h1 { font-size:clamp(2rem,8vw,3rem); }
-  .work-grid { grid-template-columns:1fr; }
-  .process-steps { grid-template-columns:1fr; }
+  .work-grid { grid-template-columns:1fr; gap:8px; }
+  .long-grid { grid-template-columns:1fr 1fr; gap:8px; }
   .hero-stats .stat { min-width:80px; }
   .svc-card { padding:28px 20px; }
-  .why-cards .why-card { padding:20px; }
   .testi-card { padding:24px 20px; }
 }
 </style>
@@ -873,42 +1021,96 @@ footer {
       <button class="tab-btn active" onclick="switchTab('short',this)">Short Form</button>
       <button class="tab-btn" onclick="switchTab('long',this)">Long Form</button>
     </div>
-    <div id="shortGrid" class="work-grid"></div>
-    <div id="longGrid" class="long-grid" style="display:none;"></div>
+    <div id="shortGrid" class="long-grid"></div>
+    <div id="longGrid" class="work-grid" style="display:none;"></div>
   </div>
 </section>
 
 <!-- ═══════════════ PROCESS ═══════════════ -->
 <section class="section process" id="process">
-  <div class="section-inner">
-    <div class="reveal">
-      <div class="eyebrow">How We Work</div>
-      <h2 class="section-h">Our <em>Process</em></h2>
+  <div class="process-inner">
+    <div class="process-top reveal">
+      <h2 class="section-h">Our 4 Step <em>Process</em></h2>
+      <p>Our proven framework for creating top-notch content that converts.</p>
     </div>
-    <div class="process-steps">
-      <div class="proc-step reveal">
-        <div class="proc-n">01</div>
-        <div class="proc-title">Discovery Call</div>
-        <div class="proc-desc">We understand your brand, goals, target audience, and content vision in a focused 30-min strategy session.</div>
+    <div class="process-layout reveal">
+      <!-- LEFT: steps 1 & 3 -->
+      <div class="proc-left">
+        <div class="proc-item">
+          <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">One</span></div>
+          <div class="proc-item-title" id="proc-t1">Discovery Call</div>
+        </div>
+        <div class="proc-item">
+          <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Three</span></div>
+          <div class="proc-item-title" id="proc-t3">Production</div>
+        </div>
       </div>
-      <div class="proc-step reveal">
-        <div class="proc-n">02</div>
-        <div class="proc-title">Creative Brief</div>
-        <div class="proc-desc">We map out the content plan, style guide, and deliverables. Everything aligned before a single frame is cut.</div>
+      <!-- CENTER: image + video bar -->
+      <div class="proc-center">
+        <div>
+          <div class="proc-center-img" id="proc-center-img">
+            <div class="proc-center-placeholder">
+              <span>🎬</span>
+              <p>Add process image from Dashboard</p>
+            </div>
+          </div>
+          <div class="proc-video-bar" onclick="openProcModal()" id="proc-video-bar">
+            <div class="proc-video-thumb" id="proc-video-thumb">▶</div>
+            <div class="proc-video-text">
+              <div class="proc-video-label">Watch Process in detail</div>
+              <div class="proc-video-sub">See how we work</div>
+            </div>
+            <div class="proc-video-arrow">→</div>
+          </div>
+        </div>
       </div>
-      <div class="proc-step reveal">
-        <div class="proc-n">03</div>
-        <div class="proc-title">Production</div>
-        <div class="proc-desc">Our team executes with precision. You'll receive progress updates and preview cuts throughout the process.</div>
+      <!-- RIGHT: steps 2 & 4 -->
+      <div class="proc-right">
+        <div class="proc-item">
+          <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Two</span></div>
+          <div class="proc-item-title" id="proc-t2">Creative Brief</div>
+        </div>
+        <div class="proc-item">
+          <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Four</span></div>
+          <div class="proc-item-title" id="proc-t4">Deliver & Grow</div>
+        </div>
       </div>
-      <div class="proc-step reveal">
-        <div class="proc-n">04</div>
-        <div class="proc-title">Deliver & Grow</div>
-        <div class="proc-desc">Final delivery with revisions included. Plus ongoing support to keep your content calendar consistently full.</div>
+    </div>
+
+    <!-- MOBILE STEPS GRID — shows only on mobile, correct 1,2,3,4 order -->
+    <div class="proc-steps-mobile reveal">
+      <div class="proc-item">
+        <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">One</span></div>
+        <div class="proc-item-title" id="proc-mt1">Discovery Call</div>
+      </div>
+      <div class="proc-item">
+        <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Two</span></div>
+        <div class="proc-item-title" id="proc-mt2">Creative Brief</div>
+      </div>
+      <div class="proc-item">
+        <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Three</span></div>
+        <div class="proc-item-title" id="proc-mt3">Production</div>
+      </div>
+      <div class="proc-item">
+        <div class="proc-item-badge"><div class="proc-item-badge-icon">◎</div><span class="proc-item-badge-text">Four</span></div>
+        <div class="proc-item-title" id="proc-mt4">Deliver & Grow</div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- PROCESS VIDEO MODAL -->
+<div class="proc-modal" id="proc-modal" onclick="if(event.target===this)closeProcModal()">
+  <div class="proc-modal-inner">
+    <div class="proc-modal-close" onclick="closeProcModal()">✕</div>
+    <div class="proc-modal-video" id="proc-modal-video">
+      <div class="proc-modal-ph">
+        <span>🎬</span>
+        <p>Add a process video from the Dashboard</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ TESTIMONIALS ═══════════════ -->
 <section class="section testi" id="testimonials">
@@ -1042,6 +1244,11 @@ const S = {
   social:{ fb:'', ig:'', yt:'', li:'' },
   copyright: '© 2025 Druvo. All rights reserved.',
   cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' },
+  process:{
+    steps:['Discovery Call','Creative Brief','Production','Deliver & Grow'],
+    centerImg:'',
+    videoUrl:''
+  },
   clients:[
     {username:'@clientusername', name:'Client Name', posts:'120', followers:'213K', following:'28', desc:'Content creator & entrepreneur', growth:'0 → 213K engaged followers', result:'Positioned as the go-to authority, attracting premium partnerships', igLink:'https://instagram.com', photo:''},
     {username:'@clientusername2', name:'Client Name 2', posts:'92', followers:'47K', following:'775', desc:'Brand & content strategist', growth:'0 → 47K targeted followers', result:'Established niche dominance through authority content', igLink:'https://instagram.com', photo:''},
@@ -1182,11 +1389,10 @@ function renderWork(){
     return `<div class="work-card">
       <div class="work-thumb" id="wst-${i}">
         <div class="work-thumb-bg"></div>
-        ${id
-          ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
-             <div class="work-play" onclick="playVideo('wst-${i}','${id}')"><div class="wplay">▶</div></div>`
-          : `<div class="work-thumb-icon">📱</div>`
-        }
+        ${id?`<img class="wt-thumb" src="https://img.youtube.com/vi/${id}/hqdefault.jpg"/>`:`<div class="work-thumb-icon">📹</div>`}
+        <div class="work-play-btn" onclick="${id?`playVideo('wst-${i}','${id}')`:''}">
+          ${id?`<div class="wplay">▶</div>`:''}
+        </div>
       </div>
       <div class="work-meta">
         <div class="work-title">${w.title}</div>
@@ -1197,13 +1403,12 @@ function renderWork(){
   lg.innerHTML=S.work.long.map((w,i)=>{
     const id=ytId(w.url);
     return `<div class="work-card">
-      <div class="work-thumb landscape" id="wlt-${i}">
+      <div class="work-thumb" id="wlt-${i}">
         <div class="work-thumb-bg"></div>
-        ${id
-          ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
-             <div class="work-play" onclick="playVideo('wlt-${i}','${id}')"><div class="wplay">▶</div></div>`
-          : `<div class="work-thumb-icon">🎬</div>`
-        }
+        ${id?`<img class="wt-thumb" src="https://img.youtube.com/vi/${id}/hqdefault.jpg"/>`:`<div class="work-thumb-icon">🎬</div>`}
+        <div class="work-play-btn" onclick="${id?`playVideo('wlt-${i}','${id}')`:''}">
+          ${id?`<div class="wplay">▶</div>`:''}
+        </div>
       </div>
       <div class="work-meta">
         <div class="work-title">${w.title}</div>
@@ -1231,8 +1436,11 @@ function renderTesti(){
         <div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role}</div></div>
       </div>
     </div>`).join('');
-  // duplicate for infinite loop
-  track.innerHTML = cards + cards;
+  // Repeat until at least 6 cards, then double for seamless loop
+  const minRepeat = Math.max(2, Math.ceil(6 / S.testi.length));
+  const repeated = Array(minRepeat).fill(cards).join('');
+  track.innerHTML = repeated + repeated;
+  track.style.animationDuration = Math.max(20, S.testi.length * minRepeat * 6) + 's';
 }
 
 function renderCal(){
@@ -1299,11 +1507,67 @@ function renderClients(){
         <a class="sc-link" href="${c.igLink||'#'}" target="_blank" onclick="event.stopPropagation()">Click to view profile ↗</a>
       </div>
     </div>`).join('');
-  // duplicate for infinite loop
-  track.innerHTML = cards + cards;
+
+  // Repeat enough times so track is wider than viewport for smooth loop
+  // Minimum 8 cards needed — repeat until we have at least 8
+  const minRepeat = Math.max(2, Math.ceil(8 / S.clients.length));
+  const repeated = Array(minRepeat).fill(cards).join('');
+  // Double it for seamless -50% animation
+  track.innerHTML = repeated + repeated;
+
+  // Adjust animation duration based on card count
+  const totalCards = S.clients.length * minRepeat * 2;
+  track.style.animationDuration = Math.max(20, totalCards * 4) + 's';
 }
 
-function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderClients(); renderServices(); renderWork(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
+function renderProcess(){
+  const p = S.process; if(!p) return;
+  const titles = p.steps||['Discovery Call','Creative Brief','Production','Deliver & Grow'];
+  // desktop titles
+  ['proc-t1','proc-t2','proc-t3','proc-t4'].forEach((id,i)=>{
+    const el=document.getElementById(id); if(el) el.textContent=titles[i]||'';
+  });
+  // mobile titles (same order 1,2,3,4)
+  ['proc-mt1','proc-mt2','proc-mt3','proc-mt4'].forEach((id,i)=>{
+    const el=document.getElementById(id); if(el) el.textContent=titles[i]||'';
+  });
+  // center image
+  const imgWrap = document.getElementById('proc-center-img');
+  if(imgWrap){
+    if(p.centerImg) imgWrap.innerHTML=`<img src="${p.centerImg}" alt="process" style="width:100%;height:100%;object-fit:cover;"/>`;
+    else imgWrap.innerHTML='<div class="proc-center-placeholder"><span>🎬</span><p>Add process image from Dashboard</p></div>';
+  }
+  // video thumb
+  const thumb = document.getElementById('proc-video-thumb');
+  if(thumb && p.videoUrl){
+    const id = ytId(p.videoUrl);
+    if(id) thumb.innerHTML=`<img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" style="width:100%;height:100%;object-fit:cover;"/>`;
+  }
+}
+
+function openProcModal(){
+  const modal = document.getElementById('proc-modal');
+  const videoDiv = document.getElementById('proc-modal-video');
+  const url = S.process?.videoUrl;
+  const id = url ? ytId(url) : null;
+  if(id){
+    videoDiv.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allowfullscreen allow="autoplay"></iframe>`;
+  } else {
+    videoDiv.innerHTML='<div class="proc-modal-ph"><span>🎬</span><p>Add a process video URL from the Dashboard → Process section</p></div>';
+  }
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeProcModal(){
+  const modal = document.getElementById('proc-modal');
+  const videoDiv = document.getElementById('proc-modal-video');
+  modal.classList.remove('open');
+  videoDiv.innerHTML='';
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeProcModal(); });
+
+function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderClients(); renderServices(); renderWork(); renderProcess(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
 
 // ══════════════════════════════════════
 // SCROLL REVEAL
@@ -1324,8 +1588,10 @@ function reObserve(container){
 function switchTab(type,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('shortGrid').style.display=type==='short'?'grid':'none';
-  document.getElementById('longGrid').style.display=type==='long'?'grid':'none';
+  const sg=document.getElementById('shortGrid');
+  const lg=document.getElementById('longGrid');
+  sg.style.display=type==='short'?'grid':'none';
+  lg.style.display=type==='long'?'grid':'none';
 }
 
 // ══════════════════════════════════════
