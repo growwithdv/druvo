@@ -159,6 +159,7 @@ html,body{height:100%;font-family:var(--f);-webkit-font-smoothing:antialiased;ba
   <nav class="sb-nav" id="sb-nav">
     <button class="sb-btn on" onclick="show('hero',this)"><span class="sb-ico">🏠</span>Hero Section</button>
     <button class="sb-btn" onclick="show('showreel',this)"><span class="sb-ico">▶</span>Showreel Video</button>
+    <button class="sb-btn" onclick="show('headings',this)"><span class="sb-ico">✏️</span>Section Headings</button>
     <button class="sb-btn" onclick="show('about',this)"><span class="sb-ico">👤</span>About Section</button>
     <button class="sb-btn" onclick="show('clients',this)"><span class="sb-ico">🌟</span>Client Showcase</button>
     <button class="sb-btn" onclick="show('services',this)"><span class="sb-ico">⚡</span>Services</button>
@@ -224,6 +225,22 @@ html,body{height:100%;font-family:var(--f);-webkit-font-smoothing:antialiased;ba
       <div class="tip">💡 YouTube link paste করো — website-এ automatically embed হবে।</div>
       <div class="card"><div class="card-head">Showreel Video</div><div class="card-body">
         <div><div class="lbl">YouTube URL</div><input class="inp" id="d-showreel" placeholder="https://www.youtube.com/watch?v=..."/></div>
+      </div></div>
+    </div>
+
+    <!-- HEADINGS -->
+    <div class="panel" id="p-headings">
+      <div class="card"><div class="card-head">Section Headings</div><div class="card-body">
+        <div class="tip">💡 প্রতিটা heading-এর শেষ word টা automatically orange হবে।</div>
+        <div><div class="lbl">About Section</div><input class="inp" id="h-about" placeholder="A Creative Team Built for Growth"/></div>
+        <div><div class="lbl">Client Showcase</div><input class="inp" id="h-showcase" placeholder="From Unknown to Undeniable"/></div>
+        <div><div class="lbl">Services</div><input class="inp" id="h-services" placeholder="Services That Drive Results"/></div>
+        <div><div class="lbl">Portfolio / Our Work</div><input class="inp" id="h-work" placeholder="Content That Performs"/></div>
+        <div><div class="lbl">Process</div><input class="inp" id="h-process" placeholder="Our 4 Step Process"/></div>
+        <div><div class="lbl">Testimonials</div><input class="inp" id="h-testi" placeholder="What Our Clients Say"/></div>
+        <div><div class="lbl">Why Druvo</div><input class="inp" id="h-why" placeholder="Not Just an Agency. A Partner."/></div>
+        <div><div class="lbl">Booking / Call</div><input class="inp" id="h-booking" placeholder="Book Your Free Strategy Call"/></div>
+        <div><div class="lbl">CTA Section</div><input class="inp" id="h-cta" placeholder="Ready to Scale Your Content?"/></div>
       </div></div>
     </div>
 
@@ -423,6 +440,17 @@ const S={
   cta:{email:'',btn1:'Book a Free Call',btn2:'View Our Work'},
   siteTitle:'Druvo — Content & Video Editing Agency',
   favicon:'🎬',
+  headings:{
+    about:'A Creative Team Built for Growth',
+    showcase:'From Unknown to Undeniable',
+    services:'Services That Drive Results',
+    work:'Content That Performs',
+    process:'Our 4 Step Process',
+    testi:'What Our Clients Say',
+    why:'Not Just an Agency. A Partner.',
+    booking:'Book Your Free Strategy Call',
+    cta:'Ready to Scale Your Content?'
+  },
   process:{steps:['Discovery Call','Creative Brief','Production','Deliver & Grow'],centerImg:'',videoUrl:''},
   copyright:'© 2025 Druvo. All rights reserved.',
   social:{fb:'',ig:'',yt:'',li:''}
@@ -473,6 +501,13 @@ function populate(){
   s('d-s1l',S.hero.s1l); s('d-s2l',S.hero.s2l); s('d-s3l',S.hero.s3l);
   // Showreel
   s('d-showreel',S.showreel);
+  // Headings
+  if(S.headings){
+    const H=S.headings;
+    s('h-about',H.about); s('h-showcase',H.showcase); s('h-services',H.services);
+    s('h-work',H.work); s('h-process',H.process); s('h-testi',H.testi);
+    s('h-why',H.why); s('h-booking',H.booking); s('h-cta',H.cta);
+  }
   // About photo
   if(S.aboutPhoto){const p=document.getElementById('about-prev');if(p)p.innerHTML=`<img src="${S.aboutPhoto}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;"/>`;}
   // About text
@@ -516,6 +551,17 @@ function collect(){
   S.hero.s1n=g('d-s1n')||S.hero.s1n; S.hero.s2n=g('d-s2n')||S.hero.s2n; S.hero.s3n=g('d-s3n')||S.hero.s3n;
   S.hero.s1l=g('d-s1l')||S.hero.s1l; S.hero.s2l=g('d-s2l')||S.hero.s2l; S.hero.s3l=g('d-s3l')||S.hero.s3l;
   S.showreel=g('d-showreel');
+  S.headings={
+    about:   g('h-about')   ||S.headings?.about,
+    showcase:g('h-showcase')||S.headings?.showcase,
+    services:g('h-services')||S.headings?.services,
+    work:    g('h-work')    ||S.headings?.work,
+    process: g('h-process') ||S.headings?.process,
+    testi:   g('h-testi')   ||S.headings?.testi,
+    why:     g('h-why')     ||S.headings?.why,
+    booking: g('h-booking') ||S.headings?.booking,
+    cta:     g('h-cta')     ||S.headings?.cta,
+  };
   S.about.p1=g('d-about1')||S.about.p1; S.about.p2=g('d-about2')||S.about.p2;
   S.about.list=S.about.list.map((_,i)=>document.getElementById('ali-'+i)?.value||_);
   S.clients=(S.clients||[]).map((_,i)=>({
@@ -710,7 +756,7 @@ async function saveAll(){
 // NAVIGATION
 // ═══════════════════════════════
 const PANELS={
-  hero:'🏠 Hero Section',showreel:'▶ Showreel Video',about:'👤 About Section',
+  hero:'🏠 Hero Section',showreel:'▶ Showreel Video',headings:'✏️ Section Headings',about:'👤 About Section',
   clients:'🌟 Client Showcase',services:'⚡ Services',work:'🎬 Portfolio',
   process:'⚙️ Our Process',
   testi:'💬 Testimonials',booking:'📅 Book a Call',cta:'📧 CTA Section',social:'🔗 Social & Footer'
