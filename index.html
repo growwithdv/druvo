@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Druvo — Content & Video Editing Agency</title>
+<title id="page-title">Druvo — Content & Video Editing Agency</title>
+<link id="page-favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
@@ -1244,6 +1245,8 @@ const S = {
   social:{ fb:'', ig:'', yt:'', li:'' },
   copyright: '© 2025 Druvo. All rights reserved.',
   cta:{ email:'', btn1:'Book a Free Call', btn2:'View Our Work' },
+  siteTitle: 'Druvo — Content & Video Editing Agency',
+  favicon: '🎬',
   process:{
     steps:['Discovery Call','Creative Brief','Production','Deliver & Grow'],
     centerImg:'',
@@ -1567,7 +1570,18 @@ function closeProcModal(){
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeProcModal(); });
 
-function renderAll(){ renderHero(); renderShowreel(); renderAbout(); renderClients(); renderServices(); renderWork(); renderProcess(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
+function renderMeta(){
+  if(S.siteTitle){
+    document.getElementById('page-title').textContent = S.siteTitle;
+    document.title = S.siteTitle;
+  }
+  if(S.favicon){
+    const fav = document.getElementById('page-favicon');
+    if(fav) fav.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${encodeURIComponent(S.favicon)}</text></svg>`;
+  }
+}
+
+function renderAll(){ renderMeta(); renderHero(); renderShowreel(); renderAbout(); renderClients(); renderServices(); renderWork(); renderProcess(); renderTesti(); renderCal(); renderSocial(); renderCta(); }
 
 // ══════════════════════════════════════
 // SCROLL REVEAL

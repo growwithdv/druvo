@@ -184,6 +184,13 @@ html,body{height:100%;font-family:var(--f);-webkit-font-smoothing:antialiased;ba
 
     <!-- HERO -->
     <div class="panel on" id="p-hero">
+      <div class="card"><div class="card-head">Browser Tab (Title & Icon)</div><div class="card-body">
+        <div class="tip">💡 Browser-এর tab-এ যা দেখাবে। Favicon-এ একটা emoji দাও — 🎬 🚀 ✨ যেকোনো।</div>
+        <div class="row2">
+          <div><div class="lbl">Page Title</div><input class="inp" id="d-site-title" placeholder="Druvo — Content & Video Editing Agency"/></div>
+          <div><div class="lbl">Favicon (emoji)</div><input class="inp" id="d-favicon" placeholder="🎬" style="font-size:1.4rem;"/></div>
+        </div>
+      </div></div>
       <div class="card"><div class="card-head">Headlines & Text</div><div class="card-body">
         <div><div class="lbl">Eyebrow Tag</div><input class="inp" id="d-eyebrow" placeholder="Content That Converts"/></div>
         <div class="row2">
@@ -414,6 +421,8 @@ const S={
   ],
   cal:'',
   cta:{email:'',btn1:'Book a Free Call',btn2:'View Our Work'},
+  siteTitle:'Druvo — Content & Video Editing Agency',
+  favicon:'🎬',
   process:{steps:['Discovery Call','Creative Brief','Production','Deliver & Grow'],centerImg:'',videoUrl:''},
   copyright:'© 2025 Druvo. All rights reserved.',
   social:{fb:'',ig:'',yt:'',li:''}
@@ -456,6 +465,8 @@ const esc=v=>(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'
 // ═══════════════════════════════
 function populate(){
   // Hero
+  s('d-site-title', S.siteTitle||'');
+  s('d-favicon', S.favicon||'🎬');
   s('d-eyebrow',S.hero.eyebrow); s('d-h1a',S.hero.h1a); s('d-h1b',S.hero.h1b);
   s('d-sub',S.hero.sub); s('d-btn1',S.hero.btn1); s('d-btn2',S.hero.btn2);
   s('d-s1n',S.hero.s1n); s('d-s2n',S.hero.s2n); s('d-s3n',S.hero.s3n);
@@ -496,6 +507,8 @@ function populate(){
 // COLLECT
 // ═══════════════════════════════
 function collect(){
+  S.siteTitle = g('d-site-title')||S.siteTitle;
+  S.favicon   = g('d-favicon')||S.favicon;
   S.hero.eyebrow=g('d-eyebrow')||S.hero.eyebrow;
   S.hero.h1a=g('d-h1a')||S.hero.h1a; S.hero.h1b=g('d-h1b')||S.hero.h1b;
   S.hero.sub=g('d-sub')||S.hero.sub;
