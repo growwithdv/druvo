@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Druvo — Content & Video Editing Agency</title>
+<meta id="og-title" property="og:title" content="Druvo — Content & Video Editing Agency"/>
+<meta id="og-desc" property="og:description" content="From scroll-stopping short-form edits to cinematic long-form productions — Druvo engineers content that builds audiences and drives real growth."/>
+<meta id="og-site" property="og:site_name" content="Druvo"/>
+<meta id="og-type" property="og:type" content="website"/>
+<meta id="tw-title" name="twitter:title" content="Druvo — Content & Video Editing Agency"/>
+<meta id="tw-desc" name="twitter:description" content="From scroll-stopping short-form edits to cinematic long-form productions."/>
+<meta id="tw-card" name="twitter:card" content="summary_large_image"/>
 <link id="page-favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
@@ -1596,10 +1603,22 @@ function closeProcModal(){
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeProcModal(); });
 
 function renderMeta(){
-  if(S.siteTitle){
-    document.getElementById('page-title').textContent = S.siteTitle;
-    document.title = S.siteTitle;
-  }
+  const title = S.siteTitle || 'Druvo — Content & Video Editing Agency';
+  const desc = S.hero?.sub || 'From scroll-stopping short-form edits to cinematic long-form productions.';
+
+  // Title tag
+  document.getElementById('page-title').textContent = title;
+  document.title = title;
+
+  // OG tags
+  const setMeta = (id, val) => { const el=document.getElementById(id); if(el) el.setAttribute('content', val); };
+  setMeta('og-title', title);
+  setMeta('og-desc',  desc);
+  setMeta('og-site',  title.split('—')[0].trim() || 'Druvo');
+  setMeta('tw-title', title);
+  setMeta('tw-desc',  desc);
+
+  // Favicon
   if(S.favicon){
     const fav = document.getElementById('page-favicon');
     if(fav) fav.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${encodeURIComponent(S.favicon)}</text></svg>`;
