@@ -40,6 +40,8 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   cursor: default;
+  opacity: 0;
+  transition: opacity .35s ease;
 }
 
 /* ── FONT WEIGHT FIX — all thin/light text → regular ── */
@@ -1691,9 +1693,16 @@ window.addEventListener('scroll',()=>{
 // INIT
 // ══════════════════════════════════════
 (async()=>{
+  // Fallback: show page after 3s even if Supabase fails
+  const fallback = setTimeout(()=>{ document.body.style.opacity='1'; }, 3000);
   await load();
+  clearTimeout(fallback);
   renderAll();
   observeAll();
+  // Fade in after everything is rendered
+  requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+  });
 })();
 </script>
 </body>
