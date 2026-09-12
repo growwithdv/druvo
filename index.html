@@ -40,9 +40,11 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   cursor: default;
-  opacity: 0;
-  transition: opacity .35s ease;
 }
+
+/* Hide dynamic content until loaded */
+#main-content { opacity:0; transition: opacity .3s ease; }
+#main-content.loaded { opacity:1; }
 
 /* ── FONT WEIGHT FIX — all thin/light text → regular ── */
 p, .hero-sub, .about-text p, .svc-desc, .proc-desc, .testi-quote,
@@ -850,6 +852,7 @@ footer {
 <body>
 
 <!-- ═══════════════ NAV ═══════════════ -->
+<div id="main-content">
 <nav>
   <a href="#" class="nav-logo">DRUV<span>O</span></a>
   <ul class="nav-links">
@@ -1212,6 +1215,7 @@ footer {
   <div class="f-copy" id="f-copy">© 2025 Druvo. All rights reserved.</div>
   <div class="f-links" id="f-links"><!-- JS rendered --></div>
 </footer>
+</div><!-- /main-content -->
 
 <script>
 // ══════════════════════════════════════
@@ -1693,16 +1697,29 @@ window.addEventListener('scroll',()=>{
 // INIT
 // ══════════════════════════════════════
 (async()=>{
-  // Fallback: show page after 3s even if Supabase fails
-  const fallback = setTimeout(()=>{ document.body.style.opacity='1'; }, 3000);
+  // Set title immediately from localStorage to avoid flash
+  try{
+    const cached = localStorage.getItem('druvo_v2');
+    if(cached){
+      const d = JSON.parse(cached);
+      if(d.siteTitle){ document.title = d.siteTitle; document.getElementById('page-title').textContent = d.siteTitle; }
+      if(d.favicon){
+        const fav = document.getElementById('page-favicon');
+        if(fav) fav.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${encodeURIComponent(d.favicon)}</text></svg>`;
+      }
+    }
+  }catch(e){}
+
+  // Load full data then render
+  const fallback = setTimeout(()=>{
+    document.getElementById('main-content').classList.add('loaded');
+  }, 3500);
+
   await load();
   clearTimeout(fallback);
   renderAll();
   observeAll();
-  // Fade in after everything is rendered
-  requestAnimationFrame(()=>{
-    document.body.style.opacity='1';
-  });
+  document.getElementById('main-content').classList.add('loaded');
 })();
 </script>
 </body>
