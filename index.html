@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title">Druvo — Content & Video Editing Agency</title>
-<meta id="og-title" property="og:title" content="Druvo — Content & Video Editing Agency"/>
-<meta id="og-desc" property="og:description" content="From scroll-stopping short-form edits to cinematic long-form productions — Druvo engineers content that builds audiences and drives real growth."/>
-<meta id="og-site" property="og:site_name" content="Druvo"/>
+<title id="page-title"></title>
+<meta id="og-title" property="og:title" content=""/>
+<meta id="og-desc" property="og:description" content=""/>
+<meta id="og-site" property="og:site_name" content=""/>
 <meta id="og-type" property="og:type" content="website"/>
-<meta id="tw-title" name="twitter:title" content="Druvo — Content & Video Editing Agency"/>
-<meta id="tw-desc" name="twitter:description" content="From scroll-stopping short-form edits to cinematic long-form productions."/>
+<meta id="tw-title" name="twitter:title" content=""/>
+<meta id="tw-desc" name="twitter:description" content=""/>
 <meta id="tw-card" name="twitter:card" content="summary_large_image"/>
 <link id="page-favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>"/>
 <style>
@@ -41,10 +41,6 @@ body {
   overflow-x: hidden;
   cursor: default;
 }
-
-/* Hide dynamic content until loaded */
-#main-content { opacity:0; transition: opacity .3s ease; }
-#main-content.loaded { opacity:1; }
 
 /* ── FONT WEIGHT FIX — all thin/light text → regular ── */
 p, .hero-sub, .about-text p, .svc-desc, .proc-desc, .testi-quote,
@@ -852,7 +848,6 @@ footer {
 <body>
 
 <!-- ═══════════════ NAV ═══════════════ -->
-<div id="main-content">
 <nav>
   <a href="#" class="nav-logo">DRUV<span>O</span></a>
   <ul class="nav-links">
@@ -961,6 +956,22 @@ footer {
   </div>
 </section>
 
+<!-- ═══════════════ OUR WORK ═══════════════ -->
+<section class="section work" id="work">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">Portfolio</div>
+      <h2 class="section-h" id="h-work">Content That <em>Performs</em></h2>
+    </div>
+    <div class="work-tabs reveal">
+      <button class="tab-btn active" onclick="switchTab('short',this)">Short Form</button>
+      <button class="tab-btn" onclick="switchTab('long',this)">Long Form</button>
+    </div>
+    <div id="shortGrid" class="long-grid"></div>
+    <div id="longGrid" class="work-grid" style="display:none;"></div>
+  </div>
+</section>
+
 <!-- ═══════════════ CLIENT SHOWCASE ═══════════════ -->
 <section class="section showcase" id="clients">
   <div class="section-inner">
@@ -1028,22 +1039,6 @@ footer {
         <div class="svc-arrow">↗</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════ OUR WORK ═══════════════ -->
-<section class="section work" id="work">
-  <div class="section-inner">
-    <div class="reveal">
-      <div class="eyebrow">Portfolio</div>
-      <h2 class="section-h" id="h-work">Content That <em>Performs</em></h2>
-    </div>
-    <div class="work-tabs reveal">
-      <button class="tab-btn active" onclick="switchTab('short',this)">Short Form</button>
-      <button class="tab-btn" onclick="switchTab('long',this)">Long Form</button>
-    </div>
-    <div id="shortGrid" class="long-grid"></div>
-    <div id="longGrid" class="work-grid" style="display:none;"></div>
   </div>
 </section>
 
@@ -1215,7 +1210,6 @@ footer {
   <div class="f-copy" id="f-copy">© 2025 Druvo. All rights reserved.</div>
   <div class="f-links" id="f-links"><!-- JS rendered --></div>
 </footer>
-</div><!-- /main-content -->
 
 <script>
 // ══════════════════════════════════════
@@ -1697,29 +1691,9 @@ window.addEventListener('scroll',()=>{
 // INIT
 // ══════════════════════════════════════
 (async()=>{
-  // Set title immediately from localStorage to avoid flash
-  try{
-    const cached = localStorage.getItem('druvo_v2');
-    if(cached){
-      const d = JSON.parse(cached);
-      if(d.siteTitle){ document.title = d.siteTitle; document.getElementById('page-title').textContent = d.siteTitle; }
-      if(d.favicon){
-        const fav = document.getElementById('page-favicon');
-        if(fav) fav.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${encodeURIComponent(d.favicon)}</text></svg>`;
-      }
-    }
-  }catch(e){}
-
-  // Load full data then render
-  const fallback = setTimeout(()=>{
-    document.getElementById('main-content').classList.add('loaded');
-  }, 3500);
-
   await load();
-  clearTimeout(fallback);
   renderAll();
   observeAll();
-  document.getElementById('main-content').classList.add('loaded');
 })();
 </script>
 </body>
