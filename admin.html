@@ -2,6 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <style>*{box-sizing:border-box;margin:0}html,body{background:#0b0b0c;color:#f2f2f3;font-family:Inter,system-ui,sans-serif}
 #adm{display:flex}
+#adm{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:#0b0b0c;color:#f2f2f3;font:14px/1.5 Inter,system-ui,sans-serif}
 #adm *{box-sizing:border-box}
 #adm h1,#adm h2,#adm h3,#adm p{margin:0}
 .ah{display:flex;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left));border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
@@ -136,7 +137,7 @@ const main=h('main',{class:'am'}),side=h('nav',{class:'as','aria-label':'Dashboa
 const toast=h('div',{class:'atoast',role:'status',hidden:true});
 const adm=h('div',{id:'adm'},
  h('header',{class:'ah'},h('b',{class:'abr',text:'Druvo Dashboard'}),stat,badge,h('span',{class:'asp'}),
-  h('a',{class:'ab',href:'index.html',target:'_blank',rel:'noopener',text:'View site \u2197'}),h('button',{class:'ab',type:'button',text:'Log out',onclick:()=>logout()})),
+  h('a',{class:'ab',href:'index.html',target:'_blank',rel:'noopener',text:'View site \u2197'}),h('button',{class:'ab pri',type:'button',id:'asv',text:'Save changes',onclick:async()=>{const b=$$('asv');b.disabled=true;const ok=await save(true);b.disabled=false;say(ok?'Saved \u2713 \u2014 live on your website':'Could not save \u2014 see the message at the top',!ok)}}),h('button',{class:'ab ghost',type:'button',text:'Log out',onclick:()=>logout()})),
  h('div',{class:'abd'},side,main),toast,
  h('datalist',{id:'adl'},['#projects','#videos','#testimonial','#love','#process','#contact','#footer'].map(v=>h('option',{value:v}))));
 document.body.appendChild(adm);
@@ -146,7 +147,7 @@ function status(t,cls){stat.textContent=t;stat.className='ast '+(cls||'')}
 function refreshBadge(){badge.hidden=!(pubJSON&&JSON.stringify(D)!==pubJSON)}
 // ---- সেভ / পাবলিশ ----
 function touch(){dirty=true;status('Unsaved changes…','warn');clearTimeout(timer);timer=setTimeout(save,700);refreshBadge()}
-async function save(){clearTimeout(timer);if(!dirty)return true;
+async function save(force){clearTimeout(timer);if(!dirty&&!force)return true;
  if(!S.db){status('Can’t save here (database unavailable)','bad');return false}
  if(saving){again=true;return false}saving=true;let ok=false;
  try{await S.db.doc('site/content').set({v:1,json:JSON.stringify(D),at:Date.now()});dirty=false;ok=true;status('All changes saved','ok')}
