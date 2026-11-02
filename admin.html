@@ -1,0 +1,297 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Druvo Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0}html,body{background:#0b0b0c;color:#f2f2f3;font-family:Inter,system-ui,sans-serif}
+#adm{display:flex}
+#adm *{box-sizing:border-box}
+#adm h1,#adm h2,#adm h3,#adm p{margin:0}
+.ah{display:flex;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left));border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}
+.abr{font:700 17px Inter,system-ui,sans-serif;letter-spacing:-.02em}
+.asp{flex:1}
+.ast{font-size:12.5px;color:rgba(255,255,255,.55)}.ast.ok{color:#7fd69b}.ast.warn{color:#f0c36a}.ast.bad{color:#ff8a80}
+.abg{font-size:12px;font-weight:600;color:#ffb089;background:rgba(242,106,46,.14);border:1px solid rgba(242,106,46,.4);border-radius:999px;padding:3px 10px}
+.abg[hidden]{display:none}
+.ab{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 13px Inter,system-ui,sans-serif;color:#fff;background:#1e1e21;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:9px 14px;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s}
+.ab:hover{background:#27272b;border-color:rgba(255,255,255,.3)}
+.ab.pri{background:#f26a2e;border-color:#f26a2e;color:#fff}.ab.pri:hover{background:#ff7c42}
+.ab.ghost{background:transparent;color:rgba(255,255,255,.7)}
+.ab:disabled{opacity:.5;cursor:default}.ab[hidden]{display:none}
+.ab:focus-visible,.in:focus-visible,.sb:focus-visible,.ib:focus-visible,summary:focus-visible{outline:2px solid #f26a2e;outline-offset:2px}
+.abd{flex:1;min-height:0;display:grid;grid-template-columns:230px minmax(0,1fr)}
+.as{display:flex;flex-direction:column;gap:2px;padding:14px 10px;border-right:1px solid rgba(255,255,255,.08);overflow-y:auto}
+.sb{appearance:none;text-align:left;background:none;border:0;color:rgba(255,255,255,.65);font:500 14px Inter,system-ui,sans-serif;padding:10px 12px;border-radius:9px;cursor:pointer}
+.sb:hover{background:rgba(255,255,255,.06);color:#fff}
+.sb[aria-current=page]{background:rgba(242,106,46,.16);color:#fff}
+.am{overflow-y:auto;padding:28px clamp(16px,4vw,48px) 90px;max-width:100%}
+.am>*{max-width:820px;margin-left:auto;margin-right:auto}
+.sh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}
+.sh h1{font:700 26px/1.15 Inter,system-ui,sans-serif;letter-spacing:-.03em}
+.sd{color:rgba(255,255,255,.55);margin-top:4px;max-width:60ch}
+.gp{background:#131315;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px}
+.gp h2{font:600 13px Inter,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5)}
+.sub{font:600 14px Inter,system-ui,sans-serif;margin-top:6px}
+.fd{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl{font-weight:600;font-size:13px}
+.fh{font-size:12.5px;color:rgba(255,255,255,.45)}.fh.okm{color:#7fd69b}.fh.badm{color:#ff8a80}
+.in{width:100%;background:#0c0c0e;color:#fff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 12px;font:14px/1.4 Inter,system-ui,sans-serif}
+textarea.in{resize:vertical}.in.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+select.in{appearance:auto}
+.in::placeholder{color:rgba(255,255,255,.3)}
+.tg .sw{display:flex;align-items:center;gap:12px;cursor:pointer;font-weight:500}
+.sw input{position:absolute;opacity:0;width:1px;height:1px}
+.tk{flex:none;width:40px;height:23px;border-radius:99px;background:#2a2a2e;position:relative;transition:background .2s}
+.tk::after{content:'';position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw input:checked+.tk{background:#f26a2e}.sw input:checked+.tk::after{transform:translateX(17px)}
+.sw input:focus-visible+.tk{outline:2px solid #f26a2e;outline-offset:2px}
+.ls{display:flex;flex-direction:column;gap:8px}
+.it{background:#0f0f11;border:1px solid rgba(255,255,255,.1);border-radius:12px}
+.it[open]{border-color:rgba(255,255,255,.2)}
+.it>summary{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;cursor:pointer;list-style:none}
+.it>summary::-webkit-details-marker{display:none}
+.ix{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#1e1e21;font-size:12px;font-weight:600}
+.sm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.ic{display:flex;gap:4px;flex:none}
+.ib{appearance:none;min-width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a1a1d;color:#fff;cursor:pointer;font-size:13px;padding:0 8px}
+.ib:disabled{opacity:.3;cursor:default}.ib.dg:hover,.ib.arm{background:#5a1f1f;border-color:#ff8a80}
+.ib2{padding:6px 14px 16px;display:flex;flex-direction:column;gap:14px;border-top:1px solid rgba(255,255,255,.07)}
+.add{align-self:flex-start;margin-top:6px}
+.mc{display:flex;gap:12px;align-items:stretch}
+.mp{flex:none;width:92px;min-height:70px;border-radius:10px;overflow:hidden;background:#0c0c0e;border:1px dashed rgba(255,255,255,.18);display:grid;place-items:center}
+.mp img{width:100%;height:100%;object-fit:cover;display:block;max-height:120px}
+.ph0,.vf{font-size:11.5px;color:rgba(255,255,255,.4);text-align:center;padding:6px}.vf{color:#7fd69b}
+.mr{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.mb{display:flex;gap:8px;flex-wrap:wrap}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.atoast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#1e1e21;border:1px solid rgba(255,255,255,.2);padding:12px 18px;border-radius:12px;font-weight:500;z-index:1100;max-width:min(92vw,520px);text-align:center}
+.atoast.bad{border-color:#ff8a80}.atoast[hidden]{display:none}
+.lk{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:12vh}
+@media(max-width:760px){.abd{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+ .as{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.08);padding:8px;scrollbar-width:none}
+ .sb{white-space:nowrap;flex:none}.mc{flex-direction:column}.mp{width:100%}.sh{flex-direction:column}}
+
+.lg{width:min(400px,100%);margin:10vh auto 0;display:flex;flex-direction:column;gap:14px;background:#131315;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:26px}
+.lg h1{font:700 22px Inter,system-ui,sans-serif}.lg .em{color:#ff8a80;font-size:13px}
+.lk code{background:#1e1e21;padding:2px 6px;border-radius:6px}
+</style></head><body>
+<script src="config.js"></script>
+<script>
+// ===== Druvo site core: কনটেন্ট মডেল, লোডিং, স্মুথ অ্যাঙ্কর স্ক্রল =====
+(function(){
+const blankV=()=>({title:'',src:'',poster:'',yt:''});
+const rep=(n,f)=>Array.from({length:n},(_,i)=>f(i));
+const DEF={
+ nav:{logo:'Druvo',links:[{t:'Work',h:'#projects'},{t:'Testimonial',h:'#testimonial'},{t:'Process',h:'#process'},{t:'Contact',h:'#contact'}],cta:{t:'Book A Call',h:'#contact'}},
+ hero:{l1:'Be the next',l2:'TOP CREATOR',bg:'',fg:''},
+ show:{projects:true,videos:true,testimonial:true,love:true,process:true,contact:true},
+ projects:{title:'Recent Projects',items:rep(6,i=>({title:'Project 0'+(i+1),src:'',poster:'',yt:''}))},
+ videos:{title:'Latest Greatest videos',sub:"Edits, shorts and ad creatives we've made for creators and brands.",tabs:[
+  {name:'Youtube videos',tall:false,items:rep(6,blankV)},
+  {name:'Shorts',tall:true,items:rep(8,blankV)},
+  {name:'SaaS Videos',tall:false,items:rep(6,blankV)},
+  {name:'Ad Creatives VSL',tall:false,items:rep(6,blankV)}]},
+ testimonial:{title:'Client testimonial',items:rep(4,i=>({title:'Client testimonial '+(i+1),src:'',poster:'',yt:''})),pill:{text:'Clients served',href:'#contact',avatars:[]}},
+ love:{title:'Creators just love us',sub:"Creators we've edited for, in their own words.",speed:55,items:rep(8,()=>({img:'',quote:'Client quote goes here.',name:'Client name',handle:'@Platform · Followers'}))},
+ process:{title:'Our process',sub:'Four steps from the first call to your finished video.',steps:[
+  {t:'Book a call',d:'Tell us about your channel, your goals and the videos you need.'},
+  {t:'Editing the Video',d:'We cut your footage and add motion graphics, sound and captions.'},
+  {t:'Review & Refine',d:'You watch the draft and send your notes. We update it to match.'},
+  {t:'Final Delivery',d:'You get the finished video, ready to post.'}]},
+ contact:{title:'Book a call',sub:"Pick a time that suits you and we'll talk about your videos.",badge:'Free · 30 min',bookingUrl:'',mode:'auto',btnText:'Open booking calendar',ctaDirect:false,email:'druvobusiness@gmail.com'},
+ footer:{q:'For queries:',email:'druvobusiness@gmail.com',big:'Ready to create?',copy:'All Rights Reserved | Druvo',social:{facebook:'',instagram:'',linkedin:'',x:'',youtube:''}},
+ settings:{ytMode:'auto'}
+};
+const IN_APP=!!(window.claude&&typeof window.claude.use==='function');
+const isObj=x=>x&&typeof x==='object'&&!Array.isArray(x);
+const clone=x=>JSON.parse(JSON.stringify(x));
+function merge(b,o){if(!isObj(b)||!isObj(o))return(o===undefined||o===null)?b:o;const r={};for(const k in b)r[k]=(k in o)?merge(b[k],o[k]):b[k];for(const k in o)if(!(k in b))r[k]=o[k];return r}
+const S=window.SITE={DEF:clone(DEF),C:clone(DEF),IN_APP,W:[],canEdit:false,pub:null,draft:null,db:null,assets:null,art:null,merge,clone};
+function runW(w){let v;try{v=JSON.stringify([].concat(w.k).map(k=>S.C[k]))}catch(e){return}
+ if(v===w.v)return;w.v=v;try{w.f(S.C)}catch(e){console.error('[site:'+w.k+']',e)}}
+S.watch=(k,f)=>{const w={k,f,v:null};S.W.push(w);runW(w)};
+S.emit=()=>S.W.forEach(runW);
+S.set=c=>{S.C=merge(clone(DEF),c||{});S.emit()};
+// ইনপুট যাচাই: শুধু নিরাপদ লিংক/মিডিয়া পাথ
+S.url=u=>{u=String(u==null?'':u).trim();if(!u)return'';if(/^(#[\w-]*|https?:\/\/\S+|mailto:\S+|tel:\S+)$/i.test(u))return u;if(/^[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(u))return'https://'+u;return''};
+S.http=u=>{u=S.url(u);return/^https?:\/\//i.test(u)?u:''};
+S.media=u=>{u=String(u==null?'':u).trim();return/^(\/_blob\/[\w-]+|https?:\/\/\S+)$/i.test(u)?u:''};
+S.ytId=u=>{u=String(u==null?'':u).trim();if(!u)return'';if(/^[\w-]{11}$/.test(u))return u;let x;try{x=new URL(/^https?:/i.test(u)?u:'https://'+u)}catch(e){return''}
+ const h=x.hostname.replace(/^(www|m|music)\./,'');let id='';
+ if(h==='youtu.be')id=x.pathname.slice(1).split('/')[0];
+ else if(/(^|\.)youtube(-nocookie)?\.com$/.test(h)){if(x.pathname==='/watch')id=x.searchParams.get('v')||'';else{const m=x.pathname.match(/^\/(shorts|embed|live|v)\/([\w-]{11})/);if(m)id=m[2]}}
+ return/^[\w-]{11}$/.test(id)?id:''};
+S.embedOk=()=>{const m=S.C.settings&&S.C.settings.ytMode;return m==='embed'||(m!=='link'&&!IN_APP)};
+S.isExt=h=>/^(https?:|mailto:|tel:)/i.test(h);
+})();
+</script>
+<script>
+(function(){
+// ===== Dashboard (#admin) — শুধু owner/editor =====
+const S=window.SITE,root=document.documentElement;
+const h=(tag,props,...kids)=>{const e=document.createElement(tag);for(const k in(props||{})){const v=props[k];if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else if(v===true)e.setAttribute(k,'');else if(v!==false&&v!=null)e.setAttribute(k,v)}
+ kids.flat().forEach(c=>{if(c==null||c===false)return;e.append(c.nodeType?c:document.createTextNode(c))});return e};
+const get=(o,p)=>p.reduce((x,k)=>x==null?x:x[k],o);
+const setp=(o,p,v)=>{get(o,p.slice(0,-1))[p[p.length-1]]=v};
+const uid=(()=>{let n=0;return()=>'f'+(++n)})();
+let D=null,cur='site',dirty=false,timer=null,saving=false,again=false,pubJSON='',openSet=new Set(),wasOn=false;
+const main=h('main',{class:'am'}),side=h('nav',{class:'as','aria-label':'Dashboard sections'}),stat=h('span',{class:'ast',role:'status'}),badge=h('span',{class:'abg',hidden:true,text:'Unpublished changes'});
+const toast=h('div',{class:'atoast',role:'status',hidden:true});
+const adm=h('div',{id:'adm'},
+ h('header',{class:'ah'},h('b',{class:'abr',text:'Druvo Dashboard'}),stat,badge,h('span',{class:'asp'}),
+  h('a',{class:'ab',href:'index.html',target:'_blank',rel:'noopener',text:'View site \u2197'}),h('button',{class:'ab',type:'button',text:'Log out',onclick:()=>logout()})),
+ h('div',{class:'abd'},side,main),toast,
+ h('datalist',{id:'adl'},['#projects','#videos','#testimonial','#love','#process','#contact','#footer'].map(v=>h('option',{value:v}))));
+document.body.appendChild(adm);
+
+const say=(t,bad)=>{toast.textContent=t;toast.hidden=false;toast.className='atoast'+(bad?' bad':'');clearTimeout(say.t);say.t=setTimeout(()=>toast.hidden=true,bad?6000:2600)};
+function status(t,cls){stat.textContent=t;stat.className='ast '+(cls||'')}
+function refreshBadge(){badge.hidden=!(pubJSON&&JSON.stringify(D)!==pubJSON)}
+// ---- সেভ / পাবলিশ ----
+function touch(){dirty=true;status('Unsaved changes…','warn');clearTimeout(timer);timer=setTimeout(save,700);refreshBadge()}
+async function save(){clearTimeout(timer);if(!dirty)return true;
+ if(!S.db){status('Can’t save here (database unavailable)','bad');return false}
+ if(saving){again=true;return false}saving=true;let ok=false;
+ try{await S.db.doc('site/content').set({v:1,json:JSON.stringify(D),at:Date.now()});dirty=false;ok=true;status('All changes saved','ok')}
+ catch(e){status('Save failed: '+((e&&(e.message||e.code))||'error'),'bad')}
+ saving=false;if(again){again=false;if(dirty)save()}return ok}
+async function publish(){const btn=$$('apub');btn.disabled=true;btn.textContent='Publishing…';
+ try{if(!(await save())&&dirty)throw{code:'save'};
+  if(!S.art)throw{code:'not_granted'};
+  await S.art.publish({'content.json':{content:JSON.stringify(D),contentType:'application/json'}});
+  pubJSON=JSON.stringify(D);S.pub=S.clone(D);refreshBadge();say('Published ✓ — visitors will see the new version')}
+ catch(e){const c=e&&e.code;say(c==='capability_disabled'||c==='not_granted'||c==='not_writer'?'Publishing is not available in this view. Use Tools → Copy settings and send them to Claude.':c==='conflict'?'A newer version was published elsewhere. Reload the page and try again.':'Publish failed'+(e&&e.message?': '+e.message:''),true)}
+ btn.disabled=false;btn.textContent='Publish'}
+function $$(id){return document.getElementById(id)}
+// ---- ফর্ম কম্পোনেন্ট ----
+function field(label,hint,ctl,cls){const id=uid();const l=h('label',{class:'fl',for:id,text:label});if(ctl.setAttribute&&!ctl.id)ctl.id=id;return h('div',{class:'fd '+(cls||'')},l,ctl,hint?h('p',{class:'fh',text:hint}):null)}
+function txt(p,label,path,o){o=o||{};const c=h(o.area?'textarea':'input',{class:'in',type:o.area?null:'text',rows:o.area?3:null,placeholder:o.ph||'',list:o.list||null,autocomplete:'off',spellcheck:o.sp?'true':'false'});
+ c.value=get(D,path)==null?'':get(D,path);c.addEventListener('input',()=>{setp(D,path,c.value);touch();o.on&&o.on(c.value)});p.appendChild(field(label,o.hint,c,o.cls));return c}
+function num(p,label,path,o){const c=h('input',{class:'in',type:'number',min:o.min,max:o.max,step:o.step||1});c.value=get(D,path);c.addEventListener('input',()=>{const v=parseFloat(c.value);if(!isNaN(v)){setp(D,path,v);touch()}});p.appendChild(field(label,o.hint,c,o.cls))}
+function sel(p,label,path,opts,o){o=o||{};const c=h('select',{class:'in'},opts.map(([v,t])=>h('option',{value:String(v),text:t})));c.value=String(get(D,path));
+ c.addEventListener('change',()=>{let v=c.value;if(v==='true')v=true;if(v==='false')v=false;setp(D,path,v);touch()});p.appendChild(field(label,o.hint,c,o.cls))}
+function tog(p,label,path,hint){const id=uid();const c=h('input',{type:'checkbox',id});c.checked=!!get(D,path);c.addEventListener('change',()=>{setp(D,path,c.checked);touch()});
+ p.appendChild(h('div',{class:'fd tg'},h('label',{for:id,class:'sw'},c,h('span',{class:'tk'}),h('span',{text:label})),hint?h('p',{class:'fh',text:hint}):null))}
+function urlf(p,label,path,o){o=o||{};const msg=h('p',{class:'fh'});const c=txt(p,label,path,{ph:o.ph,hint:o.hint,list:o.list,cls:o.cls,on:v=>chk(v)});
+ function chk(v){v=(v||'').trim();if(!v||!o.check){msg.textContent='';msg.className='fh';return}const r=o.check(v);msg.textContent=r.t;msg.className='fh '+(r.ok?'okm':'badm')}
+ c.parentNode.appendChild(msg);chk(c.value)}
+const ytChk=v=>S.ytId(v)?{ok:1,t:'✓ YouTube video recognised'}:{ok:0,t:'⚠ This doesn’t look like a YouTube video link'};
+const lnChk=v=>S.url(v)?{ok:1,t:''}:{ok:0,t:'⚠ Use a full link like https://… (or #section)'};
+function upload(file,kind){return new Promise(async(res,rej)=>{
+ if(!S.assets)return rej(new Error('Upload isn’t available in this view'));
+ if(file.size>20*1048576)return rej(new Error('File is over 20 MB — use a YouTube link instead'));
+ if(kind==='image'&&!/^image\//.test(file.type))return rej(new Error('Please choose an image file'));
+ if(kind==='video'&&!/^video\//.test(file.type))return rej(new Error('Please choose a video file'));
+ try{const r=await S.assets.upload(file);res(r.url)}catch(e){rej(new Error((e&&e.message)||'Upload failed'))}})}
+function media(p,label,path,kind,o){o=o||{};const cls=o.cls||'';
+ const prev=h('div',{class:'mp'+(kind==='video'?' vd':'')});const inp=h('input',{class:'in',type:'text',placeholder:kind==='image'?'https://… image link (or upload)':'https://… .mp4 link (or upload)',autocomplete:'off',spellcheck:'false'});
+ const file=h('input',{type:'file',accept:kind==='image'?'image/*':'video/*',hidden:true});
+ const up=h('button',{class:'ab',type:'button',text:kind==='image'?'Upload image':'Upload video'}),rm=h('button',{class:'ab ghost',type:'button',text:'Remove'});
+ function draw(){const v=get(D,path)||'';inp.value=v;prev.textContent='';const m=S.media(v);
+  if(m){prev.appendChild(kind==='image'?h('img',{src:m,alt:''}):h('span',{class:'vf',text:'▶ Video file added'}))}else prev.appendChild(h('span',{class:'ph0',text:'No '+kind}));rm.hidden=!v}
+ inp.addEventListener('input',()=>{setp(D,path,inp.value.trim());touch();const v=inp.value.trim();prev.textContent='';const m=S.media(v);if(m)prev.appendChild(kind==='image'?h('img',{src:m,alt:''}):h('span',{class:'vf',text:'▶ Video file added'}));else prev.appendChild(h('span',{class:'ph0',text:v?'Link looks invalid':'No '+kind}));rm.hidden=!v});
+ up.hidden=!S.assets;up.addEventListener('click',()=>file.click());
+ file.addEventListener('change',async()=>{const f=file.files[0];file.value='';if(!f)return;up.disabled=true;const t=up.textContent;up.textContent='Uploading…';
+  try{setp(D,path,await upload(f,kind));touch();draw();say('Uploaded ✓')}catch(e){say(e.message,true)}up.disabled=false;up.textContent=t});
+ rm.addEventListener('click',()=>{setp(D,path,'');touch();draw()});
+ draw();p.appendChild(field(label,o.hint,h('div',{class:'mc'},prev,h('div',{class:'mr'},inp,h('div',{class:'mb'},up,rm,file))),cls))}
+// লিস্ট এডিটর (যোগ/মোছা/ওঠানো-নামানো)
+function list(p,path,o){const arr=get(D,path),key=path.join('.');const box=h('div',{class:'ls'});
+ arr.forEach((it,i)=>{const k=key+'.'+i;const d=h('details',{class:'it'});if(openSet.has(k))d.open=true;d.addEventListener('toggle',()=>{d.open?openSet.add(k):openSet.delete(k)});
+  const sm=h('span',{class:'sm',text:o.sum?o.sum(it,i):'Item '+(i+1)});
+  const ctl=h('span',{class:'ic'});const mv=(dir)=>h('button',{class:'ib',type:'button','aria-label':dir<0?'Move up':'Move down',text:dir<0?'↑':'↓',disabled:(dir<0&&i===0)||(dir>0&&i===arr.length-1),
+   onclick:e=>{e.preventDefault();e.stopPropagation();const j=i+dir;[arr[i],arr[j]]=[arr[j],arr[i]];touch();rerender()}});
+  const del=h('button',{class:'ib dg',type:'button','aria-label':'Delete',text:'✕',hidden:o.fixed||arr.length<=(o.min||0),
+   onclick:e=>{e.preventDefault();e.stopPropagation();if(del.dataset.s){arr.splice(i,1);touch();rerender()}else{del.dataset.s=1;del.textContent='Sure?';del.classList.add('arm');setTimeout(()=>{del.dataset.s='';del.textContent='✕';del.classList.remove('arm')},2500)}}});
+  ctl.append(mv(-1),mv(1),del);
+  d.appendChild(h('summary',{},h('span',{class:'ix',text:String(i+1)}),sm,ctl));
+  const body=h('div',{class:'ib2'});o.body(body,path.concat(i),it,i);d.appendChild(body);box.appendChild(d)});
+ p.appendChild(box);
+ if(!o.fixed&&(!o.max||arr.length<o.max))p.appendChild(h('button',{class:'ab add',type:'button',text:'+ '+(o.add||'Add'),onclick:()=>{arr.push(o.blank());openSet.add(key+'.'+(arr.length-1));touch();rerender()}}))}
+function head(title,desc,key){const r=h('button',{class:'ab ghost rs',type:'button',text:'Reset this section',onclick:function(){if(this.dataset.s){const keys=[].concat(key);keys.forEach(k=>{D[k]=S.clone(S.DEF[k])});touch();rerender()}else{this.dataset.s=1;this.textContent='Click again to confirm';setTimeout(()=>{this.dataset.s='';this.textContent='Reset this section'},2600)}}});
+ return h('div',{class:'sh'},h('div',{},h('h1',{text:title}),desc?h('p',{class:'sd',text:desc}):null),key?r:null)}
+function grp(p,title){const g=h('section',{class:'gp'},title?h('h2',{text:title}):null);p.appendChild(g);return g}
+const videoBody=(b,P)=>{txt(b,'Title (optional)',P.concat('title'),{ph:'e.g. Brand launch edit'});
+ urlf(b,'YouTube link',P.concat('yt'),{ph:'https://www.youtube.com/watch?v=…  or  https://youtu.be/…',check:ytChk,hint:'YouTube-এর যেকোনো লিংক (video / shorts) পেস্ট করুন।'});
+ media(b,'Or upload your own video file',P.concat('src'),'video',{hint:'MP4 ফাইল, সর্বোচ্চ 20 MB. দিলে এটাই চলবে।'});
+ media(b,'Thumbnail image',P.concat('poster'),'image',{hint:'YouTube লিংক দিলে থাম্বনেইল নিজে থেকে আসে। নিজের ছবি দিলে সেটাই দেখাবে।'})};
+const vsum=(it)=>(it.title||'Untitled')+' · '+(it.src?'video file':it.yt?'YouTube':'empty');
+// ---- প্যানেল ----
+const PANELS=[
+['site','Menu & sections',b=>{b.appendChild(head('Menu & sections','Top navigation bar and which sections are shown.',['nav','show']));
+ let g=grp(b,'Navigation');txt(g,'Logo text',['nav','logo']);
+ g.appendChild(h('h3',{class:'sub',text:'Menu links'}));
+ list(g,['nav','links'],{add:'Add menu link',blank:()=>({t:'New link',h:'#'}),sum:l=>(l.t||'Link')+'  →  '+(l.h||''),max:6,body:(x,P)=>{txt(x,'Label',P.concat('t'));urlf(x,'Goes to',P.concat('h'),{list:'adl',check:lnChk,hint:'#projects, #contact… অথবা পুরো লিংক'})}});
+ g.appendChild(h('h3',{class:'sub',text:'Call-to-action button'}));txt(g,'Button text',['nav','cta','t']);urlf(g,'Button goes to',['nav','cta','h'],{list:'adl',check:lnChk,hint:'Booking লিংক সরাসরি দিতে চাইলে Book a call → “Send the top button straight to the booking link” অন করুন।'});
+ g=grp(b,'Show / hide sections');[['projects','Recent Projects'],['videos','Latest Greatest videos'],['testimonial','Client testimonial'],['love','Creators just love us'],['process','Our process'],['contact','Book a call']].forEach(([k,t])=>tog(g,t,['show',k]))}],
+['hero','Hero',b=>{b.appendChild(head('Hero','The first screen with the scroll-reveal headline.','hero'));const g=grp(b);
+ txt(g,'Small line',['hero','l1'],{ph:'Be the next'});txt(g,'Big line',['hero','l2'],{ph:'TOP CREATOR'});
+ media(g,'Background image (behind the text)',['hero','bg'],'image',{hint:'ফাঁকা রাখলে আগের ডিফল্ট ছবি থাকবে।'});
+ media(g,'Front cut-out image (over the text)',['hero','fg'],'image',{hint:'PNG/WebP, ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড সহ। ফাঁকা রাখলে ডিফল্ট।'})}],
+['projects','Recent Projects',b=>{b.appendChild(head('Recent Projects','The 3D carousel. The centre card plays automatically.','projects'));let g=grp(b);txt(g,'Section title',['projects','title']);
+ list(g,['projects','items'],{add:'Add project',min:1,max:12,blank:()=>({title:'',src:'',poster:'',yt:''}),sum:(it,i)=>vsum(it),body:videoBody})}],
+['videos','Videos',b=>{b.appendChild(head('Latest Greatest videos','Tabs and the video grid.','videos'));let g=grp(b);txt(g,'Section title',['videos','title']);txt(g,'Subtitle',['videos','sub'],{area:1});
+ g=grp(b,'Tabs');list(g,['videos','tabs'],{add:'Add tab',min:1,max:6,blank:()=>({name:'New tab',tall:false,items:[{title:'',src:'',poster:'',yt:''}]}),sum:t=>(t.name||'Tab')+' · '+t.items.length+' videos',
+  body:(x,P)=>{txt(x,'Tab name',P.concat('name'));sel(x,'Video shape',P.concat('tall'),[[false,'Wide (16:9)'],[true,'Vertical (9:16)']]);x.appendChild(h('h3',{class:'sub',text:'Videos in this tab'}));
+   list(x,P.concat('items'),{add:'Add video',max:24,blank:()=>({title:'',src:'',poster:'',yt:''}),sum:vsum,body:videoBody})}})}],
+['testimonial','Client testimonial',b=>{b.appendChild(head('Client testimonial','Vertical client videos and the pill below them.','testimonial'));let g=grp(b);txt(g,'Section title',['testimonial','title']);
+ list(g,['testimonial','items'],{add:'Add video',max:12,blank:()=>({title:'',src:'',poster:'',yt:''}),sum:vsum,body:videoBody});
+ g=grp(b,'Pill under the videos');txt(g,'Text',['testimonial','pill','text']);urlf(g,'Link',['testimonial','pill','href'],{list:'adl',check:lnChk});
+ g.appendChild(h('h3',{class:'sub',text:'Client photos in the pill'}));
+ list(g,['testimonial','pill','avatars'],{add:'Add photo',max:8,blank:()=>'',sum:(v,i)=>'Photo '+(i+1),body:(x,P)=>media(x,'Photo',P,'image')})}],
+['love','Creators love us',b=>{b.appendChild(head('Creators just love us','Scrolling photo cards with a quote. The text stays real text, not part of the image.','love'));let g=grp(b);txt(g,'Section title',['love','title']);txt(g,'Subtitle',['love','sub'],{area:1});num(g,'Scroll speed',['love','speed'],{min:10,max:200,hint:'বড় সংখ্যা = দ্রুত'});
+ g=grp(b,'Cards');list(g,['love','items'],{add:'Add card',max:20,blank:()=>({img:'',quote:'Client quote goes here.',name:'Client name',handle:'@Platform · Followers'}),sum:c=>(c.name||'Card'),
+  body:(x,P)=>{media(x,'Photo',P.concat('img'),'image',{hint:'ছবির ওপর লেখা রাখবেন না — লেখা নিচের ঘরে দিন।'});txt(x,'Quote',P.concat('quote'),{area:1,sp:1});txt(x,'Name',P.concat('name'));txt(x,'Handle / followers',P.concat('handle'))}})}],
+['process','Our process',b=>{b.appendChild(head('Our process','Four steps.','process'));let g=grp(b);txt(g,'Section title',['process','title']);txt(g,'Subtitle',['process','sub'],{area:1});
+ g=grp(b,'Steps');list(g,['process','steps'],{fixed:1,sum:s=>s.t,body:(x,P)=>{txt(x,'Step title',P.concat('t'));txt(x,'Description',P.concat('d'),{area:1,sp:1})}})}],
+['contact','Book a call',b=>{b.appendChild(head('Book a call','Your Cal.com / Calendly booking link and the contact email.','contact'));let g=grp(b,'Booking link');
+ urlf(g,'Booking link (Cal.com or Calendly)',['contact','bookingUrl'],{ph:'https://cal.com/yourname/30min',check:v=>S.http(v)?{ok:1,t:'✓ Link looks good'}:{ok:0,t:'⚠ Paste the full https:// link'},hint:'এই একটা লিংক দিলেই বুকিং কার্ড কাজ করবে।'});
+ sel(g,'How to show it',['contact','mode'],[['auto','Automatic (recommended)'],['button','Button that opens the booking page'],['embed','Calendar inside the page']],{hint:'Automatic দিলে ক্যালেন্ডার কার্ডের ভেতরেই দেখাবে। শুধু বাটন চাইলে Button বেছে নিন।'});
+ txt(g,'Button text',['contact','btnText']);tog(g,'Send the top “Book A Call” button straight to the booking link',['contact','ctaDirect'],'অফ থাকলে বাটনটা এই পেজের Book a call সেকশনে স্ক্রল করবে।');
+ g=grp(b,'Texts');txt(g,'Section title',['contact','title']);txt(g,'Subtitle',['contact','sub'],{area:1});txt(g,'Badge (top right of the card)',['contact','badge']);txt(g,'Contact email',['contact','email'],{hint:'ফাঁকা রাখলে “Or reach out directly” অংশটা লুকাবে।'})}],
+['footer','Footer & social',b=>{b.appendChild(head('Footer & social links','Icons stay inactive until you add a link.',['footer']));let g=grp(b,'Social media links');
+ [['facebook','Facebook'],['instagram','Instagram'],['linkedin','LinkedIn'],['x','X (Twitter)'],['youtube','YouTube']].forEach(([k,t])=>urlf(g,t,['footer','social',k],{ph:'https://…',check:v=>S.http(v)?{ok:1,t:''}:{ok:0,t:'⚠ Paste the full https:// link'}}));
+ g=grp(b,'Texts');txt(g,'“For queries” label',['footer','q']);txt(g,'Email',['footer','email']);txt(g,'Big closing text',['footer','big']);txt(g,'Copyright line',['footer','copy'],{hint:'বছর নিজে থেকে যোগ হয়।'})}],
+['tools','Tools',b=>{b.appendChild(head('Tools & backup','Publish, back up, restore.'));let g=grp(b,'Publish');
+ g.appendChild(h('p',{class:'sd',text:'প্রতিটা পরিবর্তন নিজে থেকে সেভ হয় আর কিছুক্ষণের মধ্যেই আপনার ওয়েবসাইটে লাইভ হয়ে যায়।'}));
+ g=grp(b,'YouTube');sel(g,'YouTube videos open',['settings','ytMode'],[['auto','Automatic (recommended)'],['embed','Player inside the page'],['link','Open on YouTube']],{hint:'Automatic দিলে কার্ড ক্লিকে সাইটের ভেতরেই পপ-আপ প্লেয়ারে চলবে।'});
+ g=grp(b,'Backup');const ta=h('textarea',{class:'in mono',rows:6,placeholder:'Paste settings JSON here to restore…',spellcheck:'false'});
+ g.append(h('div',{class:'row'},h('button',{class:'ab',type:'button',text:'Copy settings',onclick:async()=>{const j=JSON.stringify(D,null,1);try{await navigator.clipboard.writeText(j);say('Copied ✓')}catch(e){ta.value=j;ta.select();say('Select & copy the text below',false)}}}),
+  h('button',{class:'ab',type:'button',text:'Restore from text',onclick:()=>{try{const j=JSON.parse(ta.value);if(!j||typeof j!=='object'||Array.isArray(j))throw 0;D=S.merge(S.clone(S.DEF),j);touch();say('Restored ✓');rerender()}catch(e){say('That isn’t valid settings JSON',true)}}})),ta);
+ g=grp(b,'Danger zone');g.appendChild(h('button',{class:'ab ghost',type:'button',text:'Reset everything to defaults',onclick:function(){if(this.dataset.s){D=S.clone(S.DEF);touch();rerender()}else{this.dataset.s=1;this.textContent='Click again — this clears all content';setTimeout(()=>{this.dataset.s='';this.textContent='Reset everything to defaults'},3000)}}}))}]
+];
+side.append(...PANELS.map(([id,t])=>h('button',{type:'button',class:'sb',id:'sb-'+id,text:t,onclick:()=>{cur=id;rerender();main.scrollTop=0}})));
+function rerender(){const y=main.scrollTop;main.textContent='';const P=PANELS.find(p=>p[0]===cur)||PANELS[0];[...side.children].forEach(b=>b.setAttribute('aria-current',b.id==='sb-'+P[0]?'page':'false'));P[2](main);main.scrollTop=y;refreshBadge()}
+function lock(t){main.textContent='';side.textContent='';main.appendChild(h('div',{class:'lk'},h('h1',{text:'Dashboard locked'}),h('p',{text:t}),h('a',{class:'ab pri',href:'#site',text:'Back to the website'})))}
+// ---- Supabase লগইন + সেভ ----
+const cfg=window.DRUVO||{},base=String(cfg.supabaseUrl||'').replace(/\/$/,''),key=String(cfg.supabaseKey||'');
+const cfgOk=/^https:\/\/[\w-]+\.supabase\.co$/.test(base)&&key.length>20;
+let sess=null;try{sess=JSON.parse(localStorage.getItem('druvo_sess')||'null')}catch(e){}
+function keep(x){sess=x;try{x?localStorage.setItem('druvo_sess',JSON.stringify(x)):localStorage.removeItem('druvo_sess')}catch(e){}}
+async function auth(grant,body){const r=await fetch(base+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+ const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error_description||j.msg||j.message||'Login failed');
+ keep({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600),email:(j.user&&j.user.email)||''});return sess}
+async function token(){if(!sess)throw new Error('Not signed in');if(sess.expires_at*1000<Date.now()+60000){try{await auth('refresh_token',{refresh_token:sess.refresh_token})}catch(e){keep(null);throw new Error('Session expired — please log in again')}}return sess.access_token}
+S.db={doc:()=>({set:async o=>{const t=await token();
+ const r=await fetch(base+'/rest/v1/site_content',{method:'POST',headers:{apikey:key,Authorization:'Bearer '+t,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({id:'main',data:JSON.parse(o.json),updated_at:new Date().toISOString()})});
+ if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||('Save failed ('+r.status+')'))}}})};
+S.assets={upload:async f=>{const t=await token();const ext=((f.name||'').split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'bin';
+ const path='u/'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)+'.'+ext;
+ const r=await fetch(base+'/storage/v1/object/media/'+path,{method:'POST',headers:{apikey:key,Authorization:'Bearer '+t,'Content-Type':f.type||'application/octet-stream','x-upsert':'false'},body:f});
+ if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||('Upload failed ('+r.status+')'))}
+ return{id:path,url:base+'/storage/v1/object/public/media/'+path}}};
+async function logout(){keep(null);D=null;location.reload()}
+function lock(el){main.textContent='';side.textContent='';main.appendChild(el)}
+function loginView(msg){const em=h('input',{class:'in',type:'email',autocomplete:'username',placeholder:'Email',required:true}),pw=h('input',{class:'in',type:'password',autocomplete:'current-password',placeholder:'Password',required:true}),err=h('p',{class:'em',text:msg||''}),btn=h('button',{class:'ab pri',type:'submit',text:'Log in'});
+ const f=h('form',{class:'lg'},h('h1',{text:'Druvo Dashboard'}),h('p',{class:'sd',text:'Log in to edit your website.'}),em,pw,err,btn);
+ f.addEventListener('submit',async e=>{e.preventDefault();btn.disabled=true;btn.textContent='Logging in…';err.textContent='';try{await auth('password',{email:em.value.trim(),password:pw.value});enter()}catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent='Log in'}});
+ lock(f);em.focus()}
+async function enter(){status('Loading…');let row=null;
+ try{const r=await fetch(base+'/rest/v1/site_content?id=eq.main&select=data',{headers:{apikey:key},cache:'no-store'});if(r.ok){const a=await r.json();row=a[0]&&a[0].data}else if(r.status===404){lock(h('div',{class:'lk'},h('h1',{text:'Database not set up'}),h('p',{text:'Run supabase-setup.sql in the Supabase SQL Editor, then reload.'})));return}}catch(e){status('Could not reach Supabase','bad')}
+ D=S.merge(S.clone(S.DEF),row&&typeof row==='object'?row:{});pubJSON='';
+ side.textContent='';side.append(...PANELS.map(([id,t])=>h('button',{type:'button',class:'sb',id:'sb-'+id,text:t,onclick:()=>{cur=id;rerender();main.scrollTop=0}})));
+ status('All changes saved','ok');rerender()}
+addEventListener('beforeunload',()=>{if(dirty)save()});
+if(!cfgOk)lock(h('div',{class:'lk'},h('h1',{text:'Connect Supabase first'}),h('p',{},'Open ',h('code',{text:'config.js'}),' and paste your Supabase project URL and anon key.')));
+else if(sess)token().then(enter).catch(()=>loginView());
+else loginView();
+})();
+</script>
+</body></html>
