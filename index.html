@@ -222,7 +222,21 @@ a.vc{text-decoration:none}
 .vc iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1;background:#000}
 .sndp{position:absolute;left:12px;bottom:12px;z-index:3;cursor:pointer;font:600 12.5px Inter,system-ui,sans-serif;color:#fff;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:8px 13px;border-radius:999px}
 .sndp:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* ===== opening animation: dark curtain slides down, hero settles, nav drops in ===== */
+html:not(.ready){overflow:hidden}
+html.intro{overflow:hidden}
+#intro{position:fixed;inset:0;z-index:60;background:#0e0e0e;pointer-events:none;will-change:transform}
+html.ready body{opacity:1;transition:none}
+html.ready #intro{animation:introdown 1.4s cubic-bezier(.76,0,.22,1) .2s both}
+html.ready .stage{animation:introstage 1.9s cubic-bezier(.16,.7,.1,1) .2s both}
+html.ready nav[aria-label="Main"]{animation:navin .95s cubic-bezier(.2,.8,.2,1) 1.15s both}
+@keyframes introdown{to{transform:translate3d(0,101%,0)}}
+@keyframes introstage{from{translate:0 -16%;scale:1.14}to{translate:0 0;scale:1}}
+@keyframes navin{from{opacity:0;translate:0 -170%}to{opacity:1;translate:0 0}}
+@media (prefers-reduced-motion:reduce){#intro{display:none}html.ready .stage,html.ready nav[aria-label="Main"]{animation:none}}
 </style></head><body>
+<div id="intro" aria-hidden="true"></div>
 <script src="config.js"></script>
 <nav aria-label="Main"><span class="logo">Druvo</span><a href="#projects">Work</a><a href="#testimonial">Testimonial</a><a href="#process">Process</a><a href="#contact">Contact</a><a class="cta" href="#contact">Book A Call</a></nav>
 <main class="track" id="track"><div class="pin"><div class="stage" id="stage">
@@ -326,8 +340,9 @@ S.ytId=u=>{u=String(u==null?'':u).trim();if(!u)return'';if(/^[\w-]{11}$/.test(u)
 S.embedOk=()=>{const m=S.C.settings&&S.C.settings.ytMode;return m==='embed'||(m!=='link'&&!IN_APP)};
 S.isExt=h=>/^(https?:|mailto:|tel:)/i.test(h);
 // কনটেন্ট লোড: Supabase -> content.json -> ডিফল্ট
-const html=document.documentElement;let shown=false;
-function ready(){if(shown)return;shown=true;html.classList.add('ready')}
+const html=document.documentElement;let shown=false,pend=false;
+function ready(){if(shown||pend)return;pend=true;const im=document.querySelector('.bg');
+ Promise.race([im&&im.decode?im.decode().catch(()=>{}):0,new Promise(r=>setTimeout(r,1300))]).then(()=>{if(shown)return;shown=true;html.classList.add('ready','intro');setTimeout(()=>{html.classList.remove('intro');const o=document.getElementById('intro');if(o)o.remove()},2100)})}
 setTimeout(ready,1800);
 const cfg=window.DRUVO||{},base=String(cfg.supabaseUrl||'').replace(/\/$/,''),key=String(cfg.supabaseKey||'');
 const cfgOk=/^https:\/\/[\w-]+\.supabase\.co$/.test(base)&&key.length>20;
