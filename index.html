@@ -452,8 +452,8 @@ let wacc=0,wlock=0;
 wrap.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;e.preventDefault();const t=performance.now();if(t<wlock)return;wacc+=e.deltaX;if(Math.abs(wacc)>60){go(a+(wacc>0?1:-1));wacc=0;wlock=t+450}},{passive:false});
 snd.onclick=()=>{soundOn=!soundOn;snd.setAttribute('aria-pressed',soundOn);snd.textContent=soundOn?'🔊 Sound on':'🔇 Sound off';
  const v=N&&cards[a].querySelector('video');if(v){v.muted=!soundOn;if(v.paused)play()}else if(N&&cards[a]._yt)frame(cards[a],inView);hint.hidden=true};
-const unlock=()=>{unlocked=true;if(N&&cards[a]._yt&&inView)frame(cards[a],true);const v=N&&cards[a].querySelector('video');if(v&&soundOn&&inView){v.muted=false;if(v.paused)v.play().catch(()=>{});hint.hidden=true}};
-['pointerdown','keydown','touchend'].forEach(t=>addEventListener(t,unlock,{once:true,passive:true}));
+const unlock=()=>{if(!soundOn)return;unlocked=true;if(N&&cards[a]._yt&&inView)frame(cards[a],true);const v=N&&cards[a].querySelector('video');if(v&&soundOn&&inView){v.muted=false;if(v.paused)v.play().catch(()=>{});hint.hidden=true}};
+['pointerdown','mousedown','click','keydown','touchend'].forEach(t=>addEventListener(t,()=>{const v=N&&cards[a]&&cards[a].querySelector('video');if(!unlocked||(v&&v.muted&&soundOn))unlock()},{passive:true}));
 new IntersectionObserver(es=>{inView=es[0].isIntersecting;if(inView)play();else cards.forEach(c=>{const v=c.querySelector('video');v&&v.pause();frame(c,false)})},{threshold:.55}).observe(sec);
 S.watch(['projects','show','settings'],C=>{sec.style.display=C.show.projects===false?'none':'';$('ph').textContent=C.projects.title;build(C.projects.items||[])});
 })();
@@ -486,17 +486,14 @@ function card(it,i,t){
   m.addEventListener('error',()=>{if(/maxresdefault/.test(m.src))m.src=m.src.replace('maxresdefault','mqdefault');else{m.remove();const d=document.createElement('div');d.className='vph';d.textContent=it.title||'Watch on YouTube';b.appendChild(d)}});
   m.addEventListener('load',()=>{if(m.naturalWidth&&m.naturalWidth<=160&&/maxresdefault/.test(m.src))m.src=m.src.replace('maxresdefault','mqdefault')});b.appendChild(m)}
  else{const d=document.createElement('div');d.className='vph';d.style.setProperty('--h',(i*53+(cur*90)+210)%360);d.textContent=yt?(it.title||'Watch on YouTube'):'Add video';b.appendChild(d)}
- if(ok&&!link)b.addEventListener('click',()=>{if(!b.classList.contains('playing')||b._muted){pinned=b;startCard(b,false)}});
+ if(ok&&!link)b.addEventListener('click',()=>{if(!b.classList.contains('playing')||b._muted){if(curCard&&curCard!==b)stopCard(curCard);pinned=b;curCard=b;startCard(b,false)}});
  return b}
-// মাঝখানের (স্ক্রিনের সেন্টারের সবচেয়ে কাছের) ভিডিও নিজে নিজে চলে
+// ভিডিও অটোপ্লে বন্ধ: ক্লিক করলে ফ্রেমের ভেতরেই চলে; স্ক্রল করে সরে গেলে থেমে যায়
 const roots=[];let curCard=null,raf=0;
 function vis(b){const r=b.getBoundingClientRect();if(r.width<10||r.height<10)return 0;return Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(r.top,0))*Math.max(0,Math.min(r.right,innerWidth)-Math.max(r.left,0))/(r.width*r.height)}
-function pick(){raf=0;if(curCard&&!curCard.isConnected)curCard=null;if(pinned&&!pinned.isConnected)pinned=null;
- if(document.hidden||document.documentElement.classList.contains('adm')){if(curCard){stopCard(curCard);curCard=null}return}
- if(pinned&&vis(pinned)>.3){if(curCard&&curCard!==pinned){stopCard(curCard)}curCard=pinned;return}
- pinned=null;let best=null,bd=1e9;
- roots.forEach(rt=>rt.querySelectorAll('.vc.ok:not(a)').forEach(b=>{if(vis(b)<.55)return;const r=b.getBoundingClientRect(),d=Math.hypot(r.left+r.width/2-innerWidth/2,r.top+r.height/2-innerHeight/2);if(d<bd){bd=d;best=b}}));
- if(best!==curCard){if(curCard)stopCard(curCard);curCard=best;if(best)startCard(best,true)}}
+function pick(){raf=0;if(curCard&&!curCard.isConnected){curCard=null;pinned=null}
+ if(!curCard)return;
+ if(document.hidden||document.documentElement.classList.contains('adm')||vis(curCard)<.3){stopCard(curCard);curCard=null;pinned=null}}
 const sched=()=>{if(!raf)raf=requestAnimationFrame(pick)};
 addEventListener('scroll',sched,{passive:true});addEventListener('resize',sched);document.addEventListener('visibilitychange',sched);
 function addRoot(el){if(roots.indexOf(el)<0)roots.push(el);sched()}
