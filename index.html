@@ -547,7 +547,7 @@ S.watch(['love','show'],C=>{const L=C.love;sec.style.display=C.show.love===false
   if(im){const m=document.createElement('img');m.src=im;m.alt='';m.loading='lazy';m.decoding='async';c.appendChild(m)}
   else{const d=document.createElement('div');d.className='lvph';d.style.setProperty('--h',(i*47+25)%360);c.appendChild(d)}
   const t=document.createElement('div');t.className='lvt';
-  const q=document.createElement('p');q.className='lvq';q.textContent='“'+(it.quote||'')+'”';
+  const q=document.createElement('p');q.className='lvq';q.textContent=it.quote||'';if(!it.quote)q.hidden=true;
   const n=document.createElement('p');n.className='lvn';n.textContent=it.name||'';
   const hd=document.createElement('p');hd.className='lvh';hd.textContent=it.handle||'';
   t.append(q,n,hd);c.appendChild(t);g1.appendChild(c)});
