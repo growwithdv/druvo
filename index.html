@@ -139,6 +139,8 @@ html.lb-open{overflow:hidden}
 .lvt{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:clamp(14px,1.5vw,26px);font-family:Inter,system-ui,sans-serif;text-shadow:0 1px 12px rgba(0,0,0,.45)}
 .lvq{font-weight:500;font-size:clamp(15px,1.22vw,20px);line-height:1.3;letter-spacing:-.01em;margin:0 0 clamp(16px,2.6vw,44px)}
 .lvn{font-weight:500;font-size:clamp(14px,1.1vw,18px);text-align:right;margin:0 0 clamp(8px,1.2vw,18px)}
+.lvr{font-weight:400;font-size:clamp(11px,.85vw,14px);line-height:1.25;color:rgba(255,255,255,.72);text-align:right;margin:0 0 clamp(8px,1.2vw,18px)}
+.lvn:has(+.lvr:not([hidden])){margin-bottom:clamp(2px,.3vw,5px)}
 .lvh{font-weight:500;font-size:clamp(13px,1vw,16px);color:rgba(255,255,255,.78);text-align:right;margin:0}
 @media(prefers-reduced-motion:reduce){.lvr{animation:none}.lvm{overflow-x:auto;scrollbar-width:none}.lvg[aria-hidden]{display:none}}
 .cwrap{user-select:none;-webkit-user-select:none;cursor:grab}
@@ -308,7 +310,7 @@ const DEF={
   {name:'SaaS Videos',tall:false,items:rep(6,blankV)},
   {name:'Ad Creatives VSL',tall:false,items:rep(6,blankV)}]},
  testimonial:{title:'Client testimonial',items:rep(4,i=>({title:'Client testimonial '+(i+1),src:'',poster:'',yt:''})),pill:{text:'Clients served',href:'#contact',avatars:[]}},
- love:{title:'Creators just love us',sub:"Creators we've edited for, in their own words.",speed:55,items:rep(8,()=>({img:'',quote:'Client quote goes here.',name:'Client name',handle:'@Platform · Followers'}))},
+ love:{title:'Creators just love us',sub:"Creators we've edited for, in their own words.",speed:55,items:rep(8,()=>({img:'',quote:'Client quote goes here.',name:'Client name',role:'',handle:'@Platform · Followers'}))},
  process:{title:'Our process',sub:'Four steps from the first call to your finished video.',steps:[
   {t:'Book a call',d:'Tell us about your channel, your goals and the videos you need.'},
   {t:'Editing the Video',d:'We cut your footage and add motion graphics, sound and captions.'},
@@ -549,8 +551,9 @@ S.watch(['love','show'],C=>{const L=C.love;sec.style.display=C.show.love===false
   const t=document.createElement('div');t.className='lvt';
   const q=document.createElement('p');q.className='lvq';q.textContent=it.quote||'';if(!it.quote)q.hidden=true;
   const n=document.createElement('p');n.className='lvn';n.textContent=it.name||'';
+  const rl=document.createElement('p');rl.className='lvr';rl.textContent=it.role||'';if(!it.role)rl.hidden=true;
   const hd=document.createElement('p');hd.className='lvh';hd.textContent=it.handle||'';
-  t.append(q,n,hd);c.appendChild(t);g1.appendChild(c)});
+  t.append(q,n,rl,hd);c.appendChild(t);g1.appendChild(c)});
  const g2=g1.cloneNode(true);g2.removeAttribute('id');g2.setAttribute('aria-hidden','true');row.appendChild(g2);speed()});
 addEventListener('resize',speed);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(speed);

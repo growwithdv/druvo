@@ -90,7 +90,7 @@ const DEF={
   {name:'SaaS Videos',tall:false,items:rep(6,blankV)},
   {name:'Ad Creatives VSL',tall:false,items:rep(6,blankV)}]},
  testimonial:{title:'Client testimonial',items:rep(4,i=>({title:'Client testimonial '+(i+1),src:'',poster:'',yt:''})),pill:{text:'Clients served',href:'#contact',avatars:[]}},
- love:{title:'Creators just love us',sub:"Creators we've edited for, in their own words.",speed:55,items:rep(8,()=>({img:'',quote:'Client quote goes here.',name:'Client name',handle:'@Platform · Followers'}))},
+ love:{title:'Creators just love us',sub:"Creators we've edited for, in their own words.",speed:55,items:rep(8,()=>({img:'',quote:'Client quote goes here.',name:'Client name',role:'',handle:'@Platform · Followers'}))},
  process:{title:'Our process',sub:'Four steps from the first call to your finished video.',steps:[
   {t:'Book a call',d:'Tell us about your channel, your goals and the videos you need.'},
   {t:'Editing the Video',d:'We cut your footage and add motion graphics, sound and captions.'},
@@ -238,8 +238,8 @@ const PANELS=[
  g.appendChild(h('h3',{class:'sub',text:'Client photos in the pill'}));
  list(g,['testimonial','pill','avatars'],{add:'Add photo',max:8,blank:()=>'',sum:(v,i)=>'Photo '+(i+1),body:(x,P)=>media(x,'Photo',P,'image')})}],
 ['love','Creators love us',b=>{b.appendChild(head('Creators just love us','Scrolling photo cards with a quote. The text stays real text, not part of the image.','love'));let g=grp(b);txt(g,'Section title',['love','title']);txt(g,'Subtitle',['love','sub'],{area:1});num(g,'Scroll speed',['love','speed'],{min:10,max:200,hint:'বড় সংখ্যা = দ্রুত'});
- g=grp(b,'Cards');list(g,['love','items'],{add:'Add card',max:20,blank:()=>({img:'',quote:'Client quote goes here.',name:'Client name',handle:'@Platform · Followers'}),sum:c=>(c.name||'Card'),
-  body:(x,P)=>{media(x,'Photo',P.concat('img'),'image',{hint:'ছবির ওপর লেখা রাখবেন না — লেখা নিচের ঘরে দিন।'});txt(x,'Quote',P.concat('quote'),{area:1,sp:1});txt(x,'Name',P.concat('name'));txt(x,'Handle / followers',P.concat('handle'))}})}],
+ g=grp(b,'Cards');list(g,['love','items'],{add:'Add card',max:20,blank:()=>({img:'',quote:'Client quote goes here.',name:'Client name',role:'',handle:'@Platform · Followers'}),sum:c=>(c.name||'Card'),
+  body:(x,P)=>{media(x,'Photo',P.concat('img'),'image',{hint:'ছবির ওপর লেখা রাখবেন না — লেখা নিচের ঘরে দিন।'});txt(x,'Quote',P.concat('quote'),{area:1,sp:1});txt(x,'Name',P.concat('name'));txt(x,'Position / role (small, under the name — optional)',P.concat('role'));txt(x,'Handle / followers',P.concat('handle'))}})}],
 ['process','Our process',b=>{b.appendChild(head('Our process','Four steps.','process'));let g=grp(b);txt(g,'Section title',['process','title']);txt(g,'Subtitle',['process','sub'],{area:1});
  g=grp(b,'Steps');list(g,['process','steps'],{fixed:1,sum:s=>s.t,body:(x,P)=>{txt(x,'Step title',P.concat('t'));txt(x,'Description',P.concat('d'),{area:1,sp:1})}})}],
 ['contact','Book a call',b=>{b.appendChild(head('Book a call','Your Cal.com / Calendly booking link and the contact email.','contact'));let g=grp(b,'Booking link');
